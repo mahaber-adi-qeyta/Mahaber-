@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ti">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ማሓበር ዓዲ ቀይታ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:13px;background:#f1f3f4;min-height:100vh;}
+#app{max-width:600px;margin:0 auto;}
+button,input,textarea{font-family:inherit;cursor:pointer;}
+input,textarea{cursor:text;}
+.topbar{background:#1a73e8;color:#fff;padding:10px 14px;box-shadow:0 2px 6px rgba(0,0,0,.25);}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.sub-info{font-size:11px;opacity:.8;margin-top:2px;display:flex;align-items:center;gap:6px;}
+.badge{background:rgba(255,255,255,.25);border-radius:10px;padding:1px 7px;font-size:10px;}
+.tbtn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);color:#fff;padding:6px 9px;border-radius:6px;font-size:12px;}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;}
+.tab{padding:5px 10px;border-radius:20px;border:none;font-size:11px;}
+.tab.active{background:#fff;color:#1a73e8;font-weight:bold;}
+.tab.inactive{background:rgba(255,255,255,.18);color:#fff;}
+.panel{background:#fff;margin:8px 12px;border-radius:10px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.1);border:1px solid #dadce0;}
+.panel-title{font-weight:bold;color:#1a73e8;margin-bottom:10px;}
+.warn-box{font-size:12px;color:#555;margin-bottom:10px;background:#fef9e7;padding:10px;border-radius:8px;border:1px solid #f5d56a;}
+.btn-blue{background:#1a73e8;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-weight:bold;font-size:13px;}
+.btn-green{background:#188038;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-weight:bold;font-size:13px;}
+.btn-red{background:#d93025;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-weight:bold;font-size:12px;}
+.btn-grey{background:#eee;color:#555;border:none;padding:8px 14px;border-radius:6px;}
+.btn-orange{background:#e37400;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-weight:bold;font-size:12px;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.month-nav{background:#fff;border-bottom:1px solid #e0e0e0;padding:8px 14px;}
+.pills{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-bottom:5px;}
+.pill{padding:4px 8px;border-radius:10px;border:1px solid #dadce0;font-size:11px;background:#fff;color:#555;}
+.pill.on{background:#1a73e8;color:#fff;font-weight:bold;border-color:#1a73e8;}
+.pill.cur{border:2px solid #1a73e8;color:#1a73e8;font-weight:bold;}
+.summary{display:flex;gap:7px;padding:10px 12px;background:#fff;border-bottom:1px solid #e0e0e0;}
+.card{flex:1;border-radius:8px;padding:8px 6px;text-align:center;}
+.card .v{font-size:18px;font-weight:bold;}
+.card .l{font-size:10px;color:#666;margin-top:1px;}
+.mstrip{background:#e8f0fe;padding:4px 14px;display:flex;justify-content:space-between;align-items:center;}
+.arrow{background:transparent;border:none;color:#1a73e8;font-size:22px;font-weight:bold;}
+.thead{display:grid;background:#f1f3f4;border-bottom:2px solid #dadce0;padding:7px 12px;font-weight:bold;color:#555;font-size:11px;}
+.mrow{display:grid;align-items:center;min-height:42px;}
+.midx{text-align:center;color:#aaa;font-size:11px;font-weight:bold;}
+.minp{border:none;background:transparent;padding:8px 4px;font-size:13px;color:#202124;outline:none;width:100%;}
+.mbtn{margin:3px;padding:5px 0;border-radius:5px;border:none;color:#fff;font-weight:bold;font-size:11px;width:calc(100% - 6px);}
+.mdel{background:transparent;border:none;color:#ccc;font-size:17px;padding:0;}
+.mrec{background:transparent;border:none;font-size:16px;padding:0;opacity:.6;}
+.trow{background:#e8f0fe;border-top:2px solid #1a73e8;padding:8px 0;font-weight:bold;}
+.addbtn{margin-top:10px;width:100%;padding:10px;border-radius:8px;border:2px dashed #1a73e8;background:transparent;color:#1a73e8;font-weight:bold;font-size:13px;}
+.unpaid-box{margin:0 12px 12px;background:#fff3f3;border:1px solid #f5c6c2;border-radius:8px;padding:12px;}
+.notes-sec{margin:8px 12px 4px;background:#fff;border-radius:10px;padding:14px;border:1px solid #dadce0;}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:400px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3);}
+.mhdr{background:#1a73e8;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;}
+.mhdr-title{font-weight:bold;font-size:15px;}
+.mclose{background:transparent;border:none;color:#fff;font-size:22px;line-height:1;}
+.mbody{padding:20px;}
+.mfoot{padding:12px 20px;border-top:1px solid #eee;display:flex;gap:8px;justify-content:flex-end;}
+.receipt{font-family:'Courier New',monospace;background:#fffef0;border:2px dashed #ccc;border-radius:8px;padding:20px;margin-bottom:16px;}
+.sec{padding:12px;}
+.overflow{overflow-x:auto;}
+table{border-collapse:collapse;width:100%;}
+th{background:#1a73e8;color:#fff;padding:6px 4px;text-align:center;font-size:10px;white-space:nowrap;}
+th.nth{text-align:left;padding:8px 10px;min-width:90px;position:sticky;left:0;z-index:5;}
+th.tth{background:#0d47a1;}
+td{border:1px solid #fff;padding:4px 2px;text-align:center;font-size:13px;}
+td.ntd{padding:7px 10px;font-weight:bold;border-right:2px solid #dadce0;font-size:12px;position:sticky;left:0;z-index:3;}
+td.ttd{font-weight:bold;padding:7px 5px;}
+tr.even td{background:#fff;}tr.even td.ntd{background:#fff;}
+tr.odd td{background:#f8f9fa;}tr.odd td.ntd{background:#f8f9fa;}
+tfoot td{font-weight:bold;padding:6px 3px;text-align:center;font-size:10px;background:#e8f0fe;}
+tfoot td.ntd{padding:8px 10px;color:#1a73e8;position:sticky;left:0;z-index:3;}
+.cp{background:#e6f4ea!important;cursor:pointer;}
+.cu{background:#fce8e6!important;cursor:pointer;}
+.cc{outline:2px inset #1a73e8;}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.chip{padding:6px 12px;border-radius:20px;font-size:12px;border:2px solid #dadce0;background:#fff;color:#555;}
+.chip.on{background:#1a73e8;color:#fff;border-color:#1a73e8;font-weight:bold;}
+.hint{color:#888;font-size:11px;margin-top:8px;}
+.edit-input{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.7);color:#fff;padding:4px 8px;border-radius:6px;font-size:14px;font-weight:bold;outline:none;width:100%;}
+.no-sel{color:#888;text-align:center;padding:30px;background:#fff;border-radius:10px;}
+
+/* VIEW MODE banner */
+.view-banner{background:#f5f5f5;border-bottom:2px solid #dadce0;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;}
+.view-badge{background:#e8f0fe;color:#1a73e8;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:bold;border:1px solid #c5d8f7;}
+.admin-badge{background:#e6f4ea;color:#188038;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:bold;border:1px solid #ceead6;}
+
+/* LOGIN SCREEN */
+.login-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;background:#f1f3f4;}
+.login-box{background:#fff;border-radius:16px;padding:30px;width:100%;max-width:360px;box-shadow:0 4px 20px rgba(0,0,0,.12);}
+.login-church{text-align:center;color:#1a73e8;font-size:20px;font-weight:bold;margin-bottom:6px;}
+.login-sub{text-align:center;color:#888;font-size:13px;margin-bottom:24px;}
+.login-inp{width:100%;padding:12px;border:2px solid #dadce0;border-radius:8px;font-size:15px;outline:none;margin-bottom:12px;}
+.login-inp:focus{border-color:#1a73e8;}
+.login-btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer;margin-bottom:8px;}
+.login-err{color:#d93025;font-size:12px;text-align:center;margin-bottom:8px;min-height:18px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="modal-root"></div>
+<script>
+const MONTHS=["ጥሪ","ለካቲት","መጋቢት","ሚያዝያ","ግንቦት","ሰነ","ሓምለ","ነሓሰ","መስከረም","ጥቅምቲ","ሕዳር","ታህሳስ"];
+const YEARS=[2026,2027,2028,2029,2030,2031,2032];
+const NOW=new Date();
+const CUR=mk(NOW.getFullYear(),NOW.getMonth()+1);
+const ADMIN_PW="adiqeyta2024";
+const STORAGE_KEY="mahaber_v6";
+
+function mk(y,m){return y+"-"+String(m).padStart(2,"0");}
+function parseMk(k){var p=k.split("-");return{y:+p[0],m:+p[1]};}
+function lbl(k){var p=parseMk(k);return MONTHS[p.m-1]+" "+p.y;}
+function shiftMk(k,n){var p=parseMk(k);p.m+=n;while(p.m>12){p.m-=12;p.y++;}while(p.m<1){p.m+=12;p.y--;}return mk(p.y,p.m);}
+function mOfYear(y){return Array.from({length:12},function(_,i){return mk(y,i+1);});}
+function pad2(n){return String(n).padStart(2,"0");}
+function timeStr(){return pad2(NOW.getHours())+":"+pad2(NOW.getMinutes());}
+function dateStr(){return NOW.toLocaleDateString("ti",{year:"numeric",month:"long",day:"numeric"});}
+
+const DEF={churchName:"ማሓበር ዓዲ ቀይታ",amount:50,members:[{id:1,name:""},{id:2,name:""},{id:3,name:""}],payments:{},notes:{},memberNotes:{},adminPw:"adiqeyta2024"};
+
+function load(){try{var r=localStorage.getItem(STORAGE_KEY);if(r)return JSON.parse(r);}catch(e){}return null;}
+function doSave(d){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(d));return true;}catch(e){return false;}}
+
+var S={
+  data:load()||JSON.parse(JSON.stringify(DEF)),
+  activeMonth:CUR,
+  view:"month",
+  selId:null,
+  showExport:false,
+  showSettings:false,
+  navYear:NOW.getFullYear()<2026?2026:NOW.getFullYear(),
+  saveStatus:"idle",
+  importTxt:"",
+  importErr:"",
+  modal:null,
+  // AUTH
+  authMode:"choose", // choose | login-admin | login-view | app
+  isAdmin:false,
+  pwErr:""
+};
+
+if(!S.data.notes)S.data.notes={};
+if(!S.data.memberNotes)S.data.memberNotes={};
+
+function changePw(){
+  var p1=document.getElementById("new-pw1");
+  var p2=document.getElementById("new-pw2");
+  var err=document.getElementById("pw-change-err");
+  if(!p1||!p2||!err)return;
+  if(p1.value.length<4){err.textContent="❌ Password ዝሕጸር እዩ — 4 ፊደል ወሲኽ";return;}
+  if(p1.value!==p2.value){err.textContent="❌ ክልቲኡ ሓደ ክኸውን ኣለዎ";return;}
+  S.data.adminPw=p1.value;
+  saveData();
+  err.style.color="#188038";
+  err.textContent="✓ Password ተቐይሩ!";
+  p1.value="";p2.value="";
+  setTimeout(function(){if(err)err.textContent="";err.style.color="#d93025";},2000);
+}
+
+var saveT=null;
+function saveData(){
+  var ok=doSave(S.data);
+  S.saveStatus=ok?"saved":"failed";
+  clearTimeout(saveT);
+  saveT=setTimeout(function(){S.saveStatus="idle";render();},2000);
+}
+
+function isPaid(id,k){return!!S.data.payments[id+"-"+k];}
+function togglePay(id,k){
+  if(!S.isAdmin)return;
+  S.data.payments[id+"-"+k]=!S.data.payments[id+"-"+k];
+  saveData();render();
+}
+function updateName(id,val){if(!S.isAdmin)return;S.data.members=S.data.members.map(function(m){return m.id===id?{id:m.id,name:val}:m;});saveData();}
+function addMember(){if(!S.isAdmin)return;var id=S.data.members.length?Math.max.apply(null,S.data.members.map(function(m){return m.id;}))+1:1;S.data.members.push({id:id,name:""});saveData();render();}
+function delMember(id){if(!S.isAdmin)return;S.data.members=S.data.members.filter(function(m){return m.id!==id;});saveData();render();}
+
+function relMonths(){
+  var rec={};
+  Object.keys(S.data.payments).forEach(function(k){var p=k.split("-");rec[mk(p[0],parseInt(p[1]))]=1;});
+  var near=[];for(var i=-3;i<=6;i++)near.push(shiftMk(CUR,i));
+  var all=near.concat(Object.keys(rec));
+  var u={};all.forEach(function(m){u[m]=1;});
+  return Object.keys(u).sort();
+}
+
+function exportJSON(){
+  var json=JSON.stringify(S.data,null,2);
+  var blob=new Blob([json],{type:"application/json"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url;a.download="mahaber_"+new Date().toISOString().slice(0,10)+".json";
+  a.click();URL.revokeObjectURL(url);
+}
+
+function doImport(){
+  try{
+    var p=JSON.parse(S.importTxt);
+    if(!p.members||!p.payments)throw new Error("bad");
+    S.data=Object.assign({},JSON.parse(JSON.stringify(DEF)),p);
+    if(!S.data.notes)S.data.notes={};
+    if(!S.data.memberNotes)S.data.memberNotes={};
+    S.importTxt="";S.importErr="";S.showExport=false;
+    saveData();render();
+  }catch(e){S.importErr="❌ ዘይቅቡል ፋይል";render();}
+}
+
+function tryLogin(pw){
+  var correct=S.data.adminPw||"adiqeyta2024";
+  if(pw===correct){S.isAdmin=true;S.authMode="app";S.pwErr="";render();}
+  else{S.pwErr="❌ ዘይቅቡል password";render();}
+}
+
+function openReceipt(id,mk2){
+  var mem=S.data.members.filter(function(m){return m.id===id;})[0];
+  S.modal={type:"receipt",mem:mem,mk:mk2,paid:isPaid(id,mk2),rno:"RCP-"+Date.now().toString().slice(-6)};
+  render();
+}
+
+function shareReceipt(){
+  var m=S.modal;if(!m)return;
+  var paid=m.paid;
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>ቅብሊት</title><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:"Segoe UI",Arial,sans-serif;background:#f1f3f4;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}.box{background:#fffef0;border:3px dashed #ccc;border-radius:16px;padding:28px 24px;width:100%;max-width:380px;}.church{text-align:center;color:#1a73e8;font-size:19px;font-weight:bold;margin-bottom:3px;}.sub{text-align:center;color:#888;font-size:12px;margin-bottom:16px;}.row{display:flex;justify-content:space-between;padding:7px 0;font-size:14px;border-bottom:1px solid #f0f0f0;}.row.big{font-size:16px;font-weight:bold;border-bottom:none;margin-top:4px;}.stamp{text-align:center;margin:18px 0 10px;}.stamp span{display:inline-block;border:3px solid '+(paid?"#188038":"#d93025")+';color:'+(paid?"#188038":"#d93025")+';font-weight:bold;padding:8px 22px;border-radius:6px;font-size:18px;transform:rotate(-5deg);display:inline-block;letter-spacing:2px;}.footer{text-align:center;color:#aaa;font-size:12px;margin-top:14px;}.printbtn{margin-top:24px;width:100%;padding:15px;background:#1a73e8;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;font-family:inherit;}.hint{text-align:center;color:#888;font-size:12px;margin-top:10px;}@media print{.printbtn,.hint{display:none!important;}body{background:#fff;}}</style></head><body>';
+  html+='<div class="box">';
+  html+='<div class="church">⛪ '+S.data.churchName+'</div>';
+  html+='<div class="sub">ወርሓዊ ክፍሊት ቅብሊት</div>';
+  html+='<div class="row"><span style="color:#aaa">ቅብሊት No:</span><span style="color:#aaa">'+m.rno+'</span></div>';
+  html+='<div class="row"><span>ዕለት:</span><span>'+dateStr()+'</span></div>';
+  html+='<div class="row big" style="margin-top:10px"><span>ስም ኣባል:</span><span>'+(m.mem.name||"—")+'</span></div>';
+  html+='<div class="row"><span>ወርሒ:</span><span>'+lbl(m.mk)+'</span></div>';
+  html+='<div class="row big"><span>ዝኸፈሎ:</span><span style="color:#188038">$'+S.data.amount+'</span></div>';
+  html+='<div class="stamp"><span>'+(paid?"✅ ተከፊሉ":"❌ ኣይከፈለን")+'</span></div>';
+  html+='<div class="footer">ኣምላኽ ይሃብካ 🙏</div>';
+  html+='<button class="printbtn" onclick="window.print()">🖨️ Print / PDF ሓዝ</button>';
+  html+='<div class="hint">Print → Save as PDF → WhatsApp ስደዶ</div>';
+  html+='</div></body></html>';
+  var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+  var url=URL.createObjectURL(blob);
+  window.open(url,"_blank");
+}
+
+function openNotes(type,key,title){
+  if(!S.isAdmin)return;
+  var val=(type==="month"?S.data.notes:S.data.memberNotes)[key]||"";
+  S.modal={type:"notes",ntype:type,key:key,title:title,val:val};
+  render();
+}
+
+function saveNote(){
+  var ta=document.getElementById("notes-ta");
+  if(!ta)return;
+  if(S.modal.ntype==="month")S.data.notes[S.modal.key]=ta.value;
+  else S.data.memberNotes[S.modal.key]=ta.value;
+  saveData();
+  var st=document.getElementById("notes-st");
+  if(st){st.textContent="✓ ተሓዚሉ";setTimeout(function(){if(st)st.textContent="";},1500);}
+}
+
+function closeModal(){S.modal=null;render();}
+
+function printMonthReport(){
+  var d=S.data,am=S.activeMonth,members=d.members,amount=d.amount;
+  var paid=members.filter(function(m){return isPaid(m.id,am);});
+  var unpaid=members.filter(function(m){return !isPaid(m.id,am);});
+  var total=paid.length*amount;
+  var rows="";
+  members.forEach(function(m,i){
+    var p=isPaid(m.id,am);
+    rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:8px 10px">'+(i+1)+'</td><td style="padding:8px 10px;font-weight:bold">'+(m.name||"—")+'</td><td style="padding:8px 10px;text-align:center;color:'+(p?"#188038":"#d93025")+';font-weight:bold">'+(p?"✓ ከፊሉ":"✗ ኣይከፈለን")+'</td><td style="padding:8px 10px;text-align:right;font-weight:bold;color:'+(p?"#188038":"#aaa")+'">'+(p?"$"+amount:"—")+'</td></tr>';
+  });
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ሪፖርት — '+lbl(am)+'</title><style>body{font-family:"Segoe UI",Arial,sans-serif;padding:30px;max-width:700px;margin:0 auto;}h1{color:#1a73e8;font-size:20px;margin-bottom:4px;}h2{color:#555;font-size:14px;font-weight:normal;margin-bottom:20px;}table{width:100%;border-collapse:collapse;margin-bottom:20px;}thead{background:#1a73e8;color:#fff;}thead td{padding:10px;font-weight:bold;}.summary{background:#f1f3f4;border-radius:8px;padding:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;}.scard{text-align:center;}.scard .v{font-size:22px;font-weight:bold;}.scard .l{font-size:11px;color:#666;}.footer{text-align:center;color:#aaa;font-size:11px;margin-top:30px;border-top:1px solid #eee;padding-top:10px;}@media print{button{display:none!important;}}</style></head><body>';
+  html+='<h1>⛪ '+d.churchName+'</h1><h2>ወርሓዊ ሪፖርት — '+lbl(am)+'</h2>';
+  html+='<div class="summary"><div class="scard"><div class="v" style="color:#1a73e8">'+members.length+'</div><div class="l">ጠቕላላ ኣባላት</div></div><div class="scard"><div class="v" style="color:#188038">'+paid.length+'</div><div class="l">ዝኸፈሉ</div></div><div class="scard"><div class="v" style="color:#d93025">'+unpaid.length+'</div><div class="l">ዘይከፈሉ</div></div><div class="scard"><div class="v" style="color:#e37400">$'+total+'</div><div class="l">ዝተኣከበ</div></div></div>';
+  html+='<table><thead><tr><td>#</td><td>ሽም ኣባል</td><td style="text-align:center">ኩነታት</td><td style="text-align:right">ክፍሊት</td></tr></thead><tbody>'+rows+'</tbody></table>';
+  html+='<div style="background:#e8f0fe;border-radius:8px;padding:14px;display:flex;justify-content:space-between;font-weight:bold;font-size:16px"><span>ድምር ዝተኣከበ:</span><span style="color:#188038">$'+total+'</span></div>';
+  if(unpaid.length>0){
+    html+='<div style="background:#fce8e6;border-radius:8px;padding:14px;margin-top:10px"><div style="font-weight:bold;color:#d93025;margin-bottom:8px">⚠️ ዘይከፈሉ ('+unpaid.length+') — $'+(unpaid.length*amount)+' ይጎድል</div>';
+    unpaid.forEach(function(m,i){html+='<div style="color:#c62828;font-size:13px;padding:2px 0">'+(i+1)+'. '+(m.name||"—")+'</div>';});
+    html+='</div>';
+  }
+  html+='<div style="text-align:center;margin-top:20px"><button onclick="window.print()" style="background:#1a73e8;color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit">🖨️ Print / PDF ሓዝ</button></div>';
+  html+='<div class="footer">'+d.churchName+' • '+lbl(am)+' • ዕለት: '+dateStr()+'</div>';
+  html+='</body></html>';
+  var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+  var url=URL.createObjectURL(blob);
+  window.open(url,"_blank");
+}
+
+function card(l,v,col,bg){
+  return'<div class="card" style="background:'+bg+';border:1px solid '+col+'33"><div class="v" style="color:'+col+'">'+v+'</div><div class="l">'+l+'</div></div>';
+}
+
+function renderModal(){
+  var m=S.modal;
+  if(!m)return"";
+  if(m.type==="receipt"){
+    var paid=m.paid;
+    var rcpt='<div style="text-align:center;margin-bottom:12px"><div style="font-size:17px;font-weight:bold;color:#1a73e8">⛪ '+S.data.churchName+'</div><div style="font-size:11px;color:#888;margin-top:3px">ወርሓዊ ክፍሊት ቅብሊት</div></div><hr style="border:none;border-top:1px dashed #ccc;margin:10px 0"/><div style="display:flex;justify-content:space-between;font-size:12px;margin:4px 0"><span>ቅብሊት No:</span><span style="color:#aaa">'+m.rno+'</span></div><div style="display:flex;justify-content:space-between;font-size:12px;margin:4px 0"><span>ዕለት:</span><span>'+dateStr()+'</span></div><hr style="border:none;border-top:1px dashed #ccc;margin:10px 0"/><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:bold;margin:6px 0"><span>ስም ኣባል:</span><span>'+(m.mem.name||"—")+'</span></div><div style="display:flex;justify-content:space-between;font-size:14px;margin:6px 0"><span>ወርሒ:</span><span>'+lbl(m.mk)+'</span></div><div style="display:flex;justify-content:space-between;font-size:16px;font-weight:bold;margin:6px 0"><span>ዝኸፈሎ:</span><span style="color:#188038">$'+S.data.amount+'</span></div><hr style="border:none;border-top:1px dashed #ccc;margin:10px 0"/><div style="text-align:center;margin-top:10px"><span style="display:inline-block;border:3px solid '+(paid?"#188038":"#d93025")+';color:'+(paid?"#188038":"#d93025")+';font-weight:bold;padding:4px 12px;border-radius:4px;font-size:14px;transform:rotate(-8deg);display:inline-block">'+(paid?"✅ ተከፊሉ":"❌ ኣይከፈለን")+'</span></div><div style="text-align:center;margin-top:14px;font-size:11px;color:#888">ኣምላኽ ይሃብካ 🙏</div>';
+    return'<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="mhdr"><span class="mhdr-title">🧾 ቅብሊት</span><button class="mclose" onclick="closeModal()">×</button></div><div class="mbody"><div class="receipt">'+rcpt+'</div><div class="btn-row"><button class="btn-blue" onclick="shareReceipt()">🖨️ Print / PDF</button>'+(S.isAdmin&&!paid?'<button class="btn-orange" onclick="togglePay('+m.mem.id+',\''+m.mk+'\');S.modal.paid=true;render()">✓ ከፊሉ ምልክት</button>':"")+'</div></div></div></div>';
+  }
+  if(m.type==="notes"){
+    return'<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="mhdr"><span class="mhdr-title">📝 '+m.title+'</span><button class="mclose" onclick="closeModal()">×</button></div><div class="mbody"><textarea id="notes-ta" style="width:100%;min-height:130px;border:1px solid #dadce0;border-radius:8px;padding:10px;font-size:13px;resize:vertical;outline:none;" placeholder="ሕጊ ወይ ሓሳብ ጸሓፍ...">'+m.val+'</textarea><div id="notes-st" style="font-size:11px;color:#188038;height:16px;margin-top:4px"></div></div><div class="mfoot"><button class="btn-grey" onclick="closeModal()">ዕጸው</button><button class="btn-green" onclick="saveNote()">💾 ሓዝ</button></div></div></div>';
+  }
+  return"";
+}
+
+// ── LOGIN SCREEN ──
+function renderLogin(){
+  var html='<div class="login-screen">';
+  html+='<div class="login-box">';
+  html+='<div class="login-church">⛪ '+S.data.churchName+'</div>';
+  html+='<div class="login-sub">ወርሓዊ ክፍሊት ምክትታል</div>';
+
+  if(S.authMode==="choose"){
+    html+='<button class="login-btn btn-blue" onclick="S.authMode=\'login-admin\';S.pwErr=\'\';render()" style="margin-bottom:12px">🔐 Admin ኮይነ እቶ</button>';
+    html+='<button class="login-btn btn-green" onclick="S.isAdmin=false;S.authMode=\'app\';render()">👁️ ርኢ ጥራይ እቶ</button>';
+  }
+
+  if(S.authMode==="login-admin"){
+    html+='<div style="font-weight:bold;color:#555;margin-bottom:10px;font-size:14px">Admin Password ጸሓፍ:</div>';
+    html+='<input id="pw-inp" class="login-inp" type="password" placeholder="password..." onkeydown="if(event.key===\'Enter\'){var v=document.getElementById(\'pw-inp\').value;tryLogin(v);}"/>';
+    html+='<div class="login-err">'+S.pwErr+'</div>';
+    html+='<button class="login-btn btn-blue" onclick="var v=document.getElementById(\'pw-inp\').value;tryLogin(v)">እቶ →</button>';
+    html+='<button class="login-btn btn-grey" style="margin-top:6px" onclick="S.authMode=\'choose\';S.pwErr=\'\';render()">← ተመለስ</button>';
+  }
+
+  html+='</div></div>';
+  return html;
+}
+
+// ── MAIN APP ──
+function renderApp(){
+  var d=S.data,am=S.activeMonth,v=S.view,ny=S.navYear;
+  var members=d.members,amount=d.amount,churchName=d.churchName;
+  var dm=relMonths();
+  var pc=members.filter(function(m){return isPaid(m.id,am);}).length;
+  var uc=members.length-pc;
+  var tc=pc*amount;
+  var unp=members.filter(function(m){return !isPaid(m.id,am)&&m.name.trim();});
+  var selMem=members.filter(function(m){return m.id===S.selId;})[0]||null;
+  var ap=parseMk(am);
+  var isAdmin=S.isAdmin;
+
+  var html='<div class="topbar"><div class="topbar-row"><div style="flex:1;margin-right:8px">';
+  html+='<div style="font-weight:bold;font-size:15px">⛪ '+churchName+'</div>';
+  html+='<div class="sub-info">ወርሓዊ $'+amount;
+  if(isAdmin)html+='<span class="badge" style="background:rgba(255,255,255,.3)">🔐 Admin</span>';
+  if(S.saveStatus==="saved")html+='<span class="badge">✓ ተሓዚሉ</span>';
+  html+='</div></div>';
+  if(isAdmin){
+    html+='<div style="display:flex;gap:5px">';
+    html+='<button class="tbtn" onclick="S.showExport=!S.showExport;render()">💾</button>';
+    html+='</div>';
+  }
+  html+='</div>';
+  html+='<div class="tabs">';
+  [["month","📋 ወርሒ"],["year","📆 ዓመት"],["overview","🗓 ሓፈሻ"],["member","👤 ኣባል"]].forEach(function(t){
+    html+='<button class="tab '+(v===t[0]?"active":"inactive")+'" onclick="S.view=\''+t[0]+'\';render()">'+t[1]+'</button>';
+  });
+  html+='</div></div>';
+
+  // View mode banner
+  html+='<div class="view-banner">';
+  if(isAdmin){
+    html+='<span class="admin-badge">🔐 Admin mode — ኩሉ ትቅይር</span>';
+    html+='<button class="btn-grey" style="font-size:11px;padding:4px 10px" onclick="S.isAdmin=false;S.authMode=\'choose\';render()">ውጻእ</button>';
+  } else {
+    html+='<span class="view-badge">👁️ View mode — ምርኣይ ጥራይ</span>';
+    html+='<button class="btn-blue" style="font-size:11px;padding:4px 10px" onclick="S.authMode=\'login-admin\';S.pwErr=\'\';render()">Admin እቶ</button>';
+  }
+  html+='</div>';
+
+  // EXPORT + SETTINGS (admin only)
+  if(isAdmin&&S.showExport){
+    html+='<div class="panel"><div class="panel-title">💾 ዳታ ምዕቃብን ምምላስን</div>';
+    html+='<div class="warn-box">⚠️ ወርሓዊ export ምግባር ይምከር!</div>';
+    html+='<div class="btn-row"><button class="btn-blue" onclick="exportJSON()">⬇️ Export JSON</button>';
+    html+='<button class="btn-green" onclick="document.getElementById(\'file-imp\').click()">⬆️ Import</button>';
+    html+='<input id="file-imp" type="file" accept=".json" style="display:none" onchange="var r=new FileReader();r.onload=function(e){S.importTxt=e.target.result;render();};r.readAsText(this.files[0]);"/></div>';
+    if(S.importTxt){
+      html+='<div style="margin-top:10px"><div style="font-size:12px;color:#555;margin-bottom:6px">Import ክትቅጽል ዶ?</div>';
+      if(S.importErr)html+='<div style="color:#d93025;font-size:12px;margin-bottom:6px">'+S.importErr+'</div>';
+      html+='<div class="btn-row"><button class="btn-green" onclick="doImport()">✓ እወ</button><button class="btn-grey" onclick="S.importTxt=\'\';S.importErr=\'\';render()">ሰርዝ</button></div></div>';
+    }
+
+    // Password change section
+    html+='<hr style="border:none;border-top:1px solid #eee;margin:16px 0"/>';
+    html+='<div style="font-weight:bold;color:#555;margin-bottom:10px;font-size:13px">🔑 Password ምቕያር</div>';
+    html+='<input id="new-pw1" type="password" placeholder="ሓድሽ password..." style="width:100%;padding:9px;border:1px solid #dadce0;border-radius:8px;font-size:13px;outline:none;margin-bottom:8px"/>';
+    html+='<input id="new-pw2" type="password" placeholder="ሓድሽ password ደግም..." style="width:100%;padding:9px;border:1px solid #dadce0;border-radius:8px;font-size:13px;outline:none;margin-bottom:8px"/>';
+    html+='<div id="pw-change-err" style="color:#d93025;font-size:12px;min-height:16px;margin-bottom:6px"></div>';
+    html+='<button class="btn-green" style="width:100%;padding:10px" onclick="changePw()">✓ Password ቀይር</button>';
+    html+='</div>';
+  }
+
+  // MONTH VIEW
+  if(v==="month"){
+    html+='<div class="month-nav"><div class="pills">';
+    YEARS.forEach(function(y){html+='<button class="pill '+(ap.y===y?"on":"")+'" onclick="S.activeMonth=\''+mk(y,ap.m)+'\';render()">'+y+'</button>';});
+    html+='</div><div class="pills">';
+    MONTHS.forEach(function(mn,i){
+      var tmk=mk(ap.y,i+1);
+      html+='<button class="pill '+(tmk===am?"on":"")+" "+(tmk===CUR?"cur":"")+'" onclick="S.activeMonth=\''+tmk+'\';render()">'+mn+'</button>';
+    });
+    html+='</div></div>';
+    html+='<div class="summary">'+card("ኣባላት",members.length,"#1a73e8","#e8f0fe")+card("ከፊሎም ✓",pc,"#188038","#e6f4ea")+card("ዘይከፈሉ",uc,"#d93025","#fce8e6")+card("ዝተኣከበ","$"+tc,"#e37400","#fef3e2")+'</div>';
+    html+='<div class="mstrip"><button class="arrow" onclick="S.activeMonth=shiftMk(S.activeMonth,-1);render()">‹</button><div style="text-align:center"><span style="font-weight:bold;font-size:15px;color:#1a73e8">'+lbl(am)+'</span>'+(am===CUR?'<span style="margin-left:6px;font-size:11px;color:#1a73e8">● ሕጂ</span>':"")+'</div><button class="arrow" onclick="S.activeMonth=shiftMk(S.activeMonth,+1);render()">›</button></div>';
+
+    // Grid columns depend on admin mode
+    var cols=isAdmin?"26px 1fr 90px 30px 26px":"26px 1fr 100px 30px";
+    html+='<div style="display:grid;grid-template-columns:'+cols+';background:#f1f3f4;border-bottom:2px solid #dadce0;padding:7px 12px;font-weight:bold;color:#555;font-size:11px"><div>#</div><div>ሽም ኣባል</div><div style="text-align:center">ኩነታት</div><div style="text-align:center">🧾</div>'+(isAdmin?'<div></div>':"")+'</div>';
+
+    html+='<div style="padding:0 12px 8px">';
+    members.forEach(function(m,i){
+      var paid=isPaid(m.id,am);
+      html+='<div style="display:grid;grid-template-columns:'+cols+';align-items:center;background:'+(paid?"#e6f4ea":"#fce8e6")+';border-bottom:1px solid '+(paid?"#ceead6":"#f5c6c2")+';min-height:42px">';
+      html+='<div class="midx">'+(i+1)+'</div>';
+      if(isAdmin){
+        html+='<input class="minp" value="'+m.name.replace(/"/g,"&quot;")+'" placeholder="ኣባል '+(i+1)+'..." oninput="updateName('+m.id+',this.value)"/>';
+      } else {
+        html+='<div style="padding:8px 4px;font-size:13px;color:#202124">'+(m.name||"ኣባል "+(i+1))+'</div>';
+      }
+      if(isAdmin){
+        html+='<button class="mbtn" style="background:'+(paid?"#188038":"#d93025")+'" onclick="togglePay('+m.id+',\''+am+'\')">'+(paid?"✓ ከፊሉ":"✗ ኣይከፈለን")+'</button>';
+      } else {
+        html+='<div style="text-align:center;font-weight:bold;color:'+(paid?"#188038":"#d93025")+';font-size:12px">'+(paid?"✓ ከፊሉ":"✗ ኣይከፈለን")+'</div>';
+      }
+      html+='<button class="mrec" onclick="openReceipt('+m.id+',\''+am+'\')">🧾</button>';
+      if(isAdmin)html+='<button class="mdel" onclick="delMember('+m.id+')">×</button>';
+      html+='</div>';
+    });
+
+    html+='<div style="display:grid;grid-template-columns:'+cols+';background:#e8f0fe;border-top:2px solid #1a73e8;padding:8px 0;font-weight:bold;margin-top:2px"><div></div><div style="padding-left:4px;color:#1a73e8;font-size:12px">ድምር: '+members.length+' ኣባላት</div><div style="text-align:center;color:#188038;font-size:13px">$'+tc+'</div><div></div>'+(isAdmin?'<div></div>':"")+'</div>';
+
+    if(isAdmin){
+      html+='<button class="addbtn" onclick="addMember()">+ ሓድሽ ኣባል ወስኽ</button>';
+      html+='<button onclick="printMonthReport()" style="margin-top:8px;width:100%;padding:12px;border-radius:8px;border:none;background:#1a73e8;color:#fff;font-weight:bold;font-size:14px;cursor:pointer;">🖨️ ናይ '+lbl(am)+' ሪፖርት Print / PDF</button>';
+    }
+    html+='</div>';
+
+    if(unp.length>0){
+      html+='<div class="unpaid-box"><div style="font-weight:bold;color:#d93025;margin-bottom:6px">⚠️ ዘይከፈሉ ('+unp.length+') — $'+(unp.length*amount)+' ይጎድል</div>';
+      unp.forEach(function(m,i){html+='<div style="color:#c62828;font-size:12px;padding:2px 0">'+(i+1)+'. '+m.name+'</div>';});
+      html+='</div>';
+    }
+
+    var mNote=d.notes[am]||"";
+    html+='<div class="notes-sec"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-weight:bold;color:#555;font-size:12px">📝 ሕጊ / ሓሳብ — '+lbl(am)+'</div>';
+    if(isAdmin)html+='<button class="btn-orange" style="padding:4px 10px;font-size:11px" onclick="openNotes(\'month\',\''+am+'\',\''+lbl(am)+'\')">✏️ ጸሓፍ</button>';
+    html+='</div>';
+    html+=mNote?'<div style="background:#fef9e7;border:1px solid #f5d56a;border-radius:8px;padding:10px;font-size:13px;color:#555;white-space:pre-wrap">'+mNote+'</div>':'<div style="color:#bbb;font-size:12px;font-style:italic">ሕጊ ወይ ሓሳብ ኣይተጸሓፈን</div>';
+    html+='</div>';
+  }
+
+  // YEAR VIEW
+  if(v==="year"){
+    var ymks=mOfYear(ny);
+    var yt=ymks.reduce(function(s,k){return s+members.filter(function(m){return isPaid(m.id,k);}).length*amount;},0);
+    var yp=members.length*12*amount;
+    html+='<div class="sec"><div style="display:flex;gap:4px;justify-content:center;margin-bottom:12px;flex-wrap:wrap">';
+    YEARS.forEach(function(y){html+='<button class="pill '+(ny===y?"on":"")+'" onclick="S.navYear='+y+';render()">'+y+'</button>';});
+    html+='</div><div style="display:flex;gap:7px;margin-bottom:12px">'+card(ny+" ዝተኣከበ","$"+yt,"#188038","#e6f4ea")+card("ዝተጸበ","$"+yp,"#1a73e8","#e8f0fe")+card("ዘይተሰብሰበ","$"+(yp-yt),"#d93025","#fce8e6")+'</div>';
+    html+='<div class="overflow"><table><thead><tr><th class="nth">ሽም ኣባል</th>';
+    MONTHS.forEach(function(mn,i){var tmk=mk(ny,i+1);html+='<th onclick="S.activeMonth=\''+tmk+'\';S.view=\'month\';render()" style="min-width:34px;'+(tmk===CUR?"border-bottom:3px solid #ffd700":"")+'">'+mn.slice(0,3)+'</th>';});
+    html+='<th class="tth">ድምር</th></tr></thead><tbody>';
+    members.forEach(function(m,idx){
+      var pm=ymks.filter(function(k){return isPaid(m.id,k);});
+      html+='<tr class="'+(idx%2===0?"even":"odd")+'"><td class="ntd">'+(m.name||"ኣባል "+(idx+1))+'</td>';
+      ymks.forEach(function(k){
+        var p=isPaid(m.id,k);
+        html+='<td class="'+(p?"cp":"cu")+(k===CUR?" cc":"")+'"'+(isAdmin?' onclick="togglePay('+m.id+',\''+k+'\')"':'')+'>'+( p?"✓":"·")+'</td>';
+      });
+      html+='<td class="ttd" style="color:'+(pm.length===12?"#188038":pm.length>0?"#e37400":"#d93025")+'">$'+(pm.length*amount)+'</td></tr>';
+    });
+    html+='</tbody><tfoot><tr><td class="ntd">ድምር</td>';
+    ymks.forEach(function(k){var c=members.filter(function(m){return isPaid(m.id,k);}).length;html+='<td style="color:'+(c===members.length?"#188038":"#d93025")+'">'+c+'/'+members.length+'</td>';});
+    html+='<td style="color:#1a73e8;font-weight:bold;padding:7px 5px">$'+yt+'</td></tr></tfoot></table></div>';
+    html+='<div class="hint">💡 '+(isAdmin?"ሓደ ክፍሊ ጠውቕ ፡ ኩነታቱ ይቕየር":"ምርኣይ ጥራይ")+'</div></div>';
+  }
+
+  // OVERVIEW
+  if(v==="overview"){
+    html+='<div class="sec"><div style="font-weight:bold;color:#1a73e8;margin-bottom:8px">🗓 ሓፈሻዊ ሪፖርት</div><div class="overflow"><table><thead><tr><th class="nth" style="position:sticky;left:0;z-index:6">ሽም ኣባል</th>';
+    dm.forEach(function(k){var p2=parseMk(k);html+='<th onclick="S.activeMonth=\''+k+'\';S.view=\'month\';render()" style="min-width:40px;font-size:9px;'+(k===CUR?"border-bottom:3px solid #ffd700":"")+'">'+MONTHS[p2.m-1].slice(0,3)+'<br/><span style="opacity:.7">'+p2.y+'</span></th>';});
+    html+='<th class="tth">ጠቕላላ</th></tr></thead><tbody>';
+    members.forEach(function(m,idx){
+      var tot=dm.filter(function(k){return isPaid(m.id,k);}).length*amount;
+      html+='<tr class="'+(idx%2===0?"even":"odd")+'" style="cursor:pointer" onclick="S.selId='+m.id+';S.view=\'member\';render()"><td class="ntd" style="color:#1a73e8">'+(m.name||"ኣባል "+(idx+1))+'</td>';
+      dm.forEach(function(k){
+        var p=isPaid(m.id,k);
+        html+='<td class="'+(p?"cp":"cu")+(k===CUR?" cc":"")+'"'+(isAdmin?' onclick="event.stopPropagation();togglePay('+m.id+',\''+k+'\')"':' onclick="event.stopPropagation()"')+'>'+(p?"✓":"·")+'</td>';
+      });
+      html+='<td class="ttd" style="color:#1a73e8">$'+tot+'</td></tr>';
+    });
+    html+='</tbody><tfoot><tr><td class="ntd">ድምር</td>';
+    dm.forEach(function(k){var c=members.filter(function(m){return isPaid(m.id,k);}).length;html+='<td style="color:'+(c===members.length?"#188038":"#d93025")+'">'+c+'/'+members.length+'</td>';});
+    html+='<td style="color:#1a73e8;font-weight:bold">$'+dm.reduce(function(s,k){return s+members.filter(function(m){return isPaid(m.id,k);}).length*amount;},0)+'</td></tr></tfoot></table></div>';
+    html+='<div class="hint">💡 ስም ጠውቕ ↗ ናይ ኣባል ዝርዝር ርኣ</div></div>';
+  }
+
+  // MEMBER VIEW
+  if(v==="member"){
+    html+='<div class="sec"><div style="font-weight:bold;color:#1a73e8;margin-bottom:10px">👤 ናይ ኣባል ሪፖርት</div><div class="chips">';
+    members.forEach(function(m){html+='<button class="chip '+(S.selId===m.id?"on":"")+'" onclick="S.selId='+m.id+';render()">'+(m.name||"ኣባል "+m.id)+'</button>';});
+    html+='</div>';
+    if(selMem){
+      var allMks=YEARS.reduce(function(a,y){return a.concat(mOfYear(y));},[]);
+      var pmks=allMks.filter(function(k){return isPaid(selMem.id,k);});
+      var nuMks=dm.filter(function(k){return !isPaid(selMem.id,k);});
+      var ymks2=mOfYear(ny);
+      html+='<div style="display:flex;gap:7px;margin-bottom:12px">'+card("ዝኸፈሎ ወርሓት",pmks.length,"#188038","#e6f4ea")+card("ዘይከፈሎ",nuMks.length,"#d93025","#fce8e6")+card("ጠቕላላ","$"+(pmks.length*amount),"#e37400","#fef3e2")+'</div>';
+      html+='<div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">';
+      YEARS.forEach(function(y){html+='<button class="pill '+(ny===y?"on":"")+'" onclick="S.navYear='+y+';render()">'+y+'</button>';});
+      html+='</div>';
+      ymks2.forEach(function(k){
+        var paid=isPaid(selMem.id,k);
+        var isc=k===CUR;
+        html+='<div style="display:flex;align-items:center;justify-content:space-between;background:'+(paid?"#e6f4ea":"#fce8e6")+';border-radius:8px;padding:10px 12px;margin-bottom:5px;border:'+(isc?"2":"1")+'px solid '+(paid?"#ceead6":"#f5c6c2")+'"><div><div style="font-weight:bold;color:#333">'+lbl(k)+'</div>'+(isc?'<div style="font-size:10px;color:#1a73e8">● ሕጂ</div>':"")+'</div><div style="display:flex;align-items:center;gap:6px">'+(paid?'<span style="color:#188038;font-size:12px;font-weight:bold">$'+amount+'</span>':"");
+        html+='<div style="font-weight:bold;color:'+(paid?"#188038":"#d93025")+';font-size:12px">'+(paid?"✓ ከፊሉ":"✗ ኣይከፈለን")+'</div>';
+        html+='<button style="background:#fff8e1;border:1px solid #f5d56a;color:#e37400;padding:5px 8px;border-radius:6px;font-size:13px;" onclick="openReceipt('+selMem.id+',\''+k+'\')">🧾</button></div></div>';
+      });
+    } else {
+      html+='<div class="no-sel">☝️ ናይ ኣባል ስም ምረጽ</div>';
+    }
+    html+='</div>';
+  }
+
+  return html;
+}
+
+function render(){
+  var root=document.getElementById("root");
+  var modalRoot=document.getElementById("modal-root");
+
+  if(S.authMode==="choose"||S.authMode==="login-admin"){
+    root.innerHTML=renderLogin();
+    modalRoot.innerHTML="";
+    if(S.authMode==="login-admin"){
+      var inp=document.getElementById("pw-inp");
+      if(inp)inp.focus();
+    }
+  } else {
+    root.innerHTML='<div id="app">'+renderApp()+'</div>';
+    modalRoot.innerHTML=renderModal();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
