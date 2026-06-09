@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ti">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ማሓበር ዓዲ ቀይታ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:13px;background:#f1f3f4;min-height:100vh}
+#root{max-width:600px;margin:0 auto}
+button{cursor:pointer;font-family:inherit}
+input,textarea{font-family:inherit;cursor:text}
+.topbar{background:#1a73e8;color:#fff;padding:10px 14px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.toprow{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.sub{font-size:11px;opacity:.8;margin-top:2px;display:flex;align-items:center;gap:6px}
+.badge{background:rgba(255,255,255,.25);border-radius:10px;padding:1px 7px;font-size:10px}
+.tbtn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);color:#fff;padding:6px 9px;border-radius:6px;font-size:12px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{padding:5px 8px;border-radius:20px;border:none;font-size:11px}
+.ton{background:#fff;color:#1a73e8;font-weight:bold}
+.toff{background:rgba(255,255,255,.18);color:#fff}
+.vbanner{background:#f5f5f5;border-bottom:2px solid #e0e0e0;padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.vbadge{background:#e8f0fe;color:#1a73e8;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:bold}
+.abadge{background:#e6f4ea;color:#188038;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:bold}
+.panel{background:#fff;margin:8px 12px;border-radius:10px;padding:14px;border:1px solid #dadce0}
+.inp{width:100%;padding:9px;border:1px solid #dadce0;border-radius:8px;font-size:13px;outline:none;margin-bottom:8px}
+.inp:focus{border-color:#1a73e8}
+.bblue{background:#1a73e8;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:bold;font-size:13px}
+.bgreen{background:#188038;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:bold;font-size:13px}
+.bgrey{background:#eee;color:#555;border:none;padding:8px 14px;border-radius:6px}
+.borg{background:#e37400;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;font-size:11px}
+.mnav{background:#fff;border-bottom:1px solid #e0e0e0;padding:8px 14px}
+.pills{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-bottom:5px}
+.pill{padding:4px 7px;border-radius:10px;border:1px solid #dadce0;font-size:11px;background:#fff;color:#555;cursor:pointer}
+.pon{background:#1a73e8;color:#fff;font-weight:bold;border-color:#1a73e8}
+.pcur{border:2px solid #1a73e8;color:#1a73e8;font-weight:bold}
+.sumrow{display:flex;gap:6px;padding:10px 12px;background:#fff;border-bottom:1px solid #e0e0e0}
+.card{flex:1;border-radius:8px;padding:7px 4px;text-align:center}
+.cv{font-size:15px;font-weight:bold}
+.cl{font-size:9px;color:#666;margin-top:2px}
+.mstrip{background:#e8f0fe;padding:4px 14px;display:flex;justify-content:space-between;align-items:center}
+.arr{background:transparent;border:none;color:#1a73e8;font-size:22px;font-weight:bold;cursor:pointer}
+.sec{padding:12px}
+.nosel{color:#888;text-align:center;padding:30px;background:#fff;border-radius:10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:6px 12px;border-radius:20px;font-size:12px;border:2px solid #dadce0;background:#fff;color:#555;cursor:pointer}
+.chipon{background:#1a73e8;color:#fff;border-color:#1a73e8;font-weight:bold}
+.overflow{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th{background:#1a73e8;color:#fff;padding:6px 3px;text-align:center;font-size:10px;white-space:nowrap;cursor:pointer}
+th.nth{text-align:left;padding:8px;min-width:80px;position:sticky;left:0;z-index:5}
+th.tth{background:#0d47a1}
+td{border:1px solid #fff;padding:4px 2px;text-align:center;font-size:12px}
+td.ntd{padding:6px 8px;font-weight:bold;border-right:2px solid #dadce0;font-size:11px;position:sticky;left:0;z-index:3}
+td.ttd{font-weight:bold;padding:6px 4px}
+tr.even td{background:#fff}tr.even td.ntd{background:#fff}
+tr.odd td{background:#f8f9fa}tr.odd td.ntd{background:#f8f9fa}
+tfoot td{font-weight:bold;padding:5px 2px;text-align:center;font-size:10px;background:#e8f0fe}
+tfoot td.ntd{padding:7px 8px;color:#1a73e8;position:sticky;left:0;z-index:3}
+.cp{background:#e6f4ea!important;cursor:pointer}
+.cu{background:#fce8e6!important;cursor:pointer}
+.cc{outline:2px inset #1a73e8}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:400px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.mhdr{background:#1a73e8;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.mhdr span{font-weight:bold;font-size:15px}
+.mcls{background:transparent;border:none;color:#fff;font-size:22px;line-height:1;cursor:pointer}
+.mbdy{padding:20px}
+.mfoot{padding:12px 20px;border-top:1px solid #eee;display:flex;gap:8px;justify-content:flex-end}
+.rcpt{font-family:'Courier New',monospace;background:#fffef0;border:2px dashed #ccc;border-radius:8px;padding:16px;margin-bottom:14px}
+.loginwrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px;background:#f1f3f4}
+.loginbox{background:#fff;border-radius:16px;padding:30px;width:100%;max-width:360px;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.lbtn{width:100%;padding:14px;border:none;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer;margin-bottom:8px}
+.finrow{background:#fff;border-radius:8px;padding:11px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="mroot"></div>
+<script>
+var MN=["ጥሪ","ለካቲት","መጋቢት","ሚያዝያ","ግንቦት","ሰነ","ሓምለ","ነሓሰ","መስከረም","ጥቅምቲ","ሕዳር","ታህሳስ"];
+var YRS=[2026,2027,2028,2029,2030,2031,2032];
+var NOW=new Date();
+var CUR=mk(NOW.getFullYear(),NOW.getMonth()+1);
+var KEY="mahaber_v9";
+
+function mk(y,m){return y+"-"+String(m).padStart(2,"0")}
+function pmk(k){var p=k.split("-");return{y:+p[0],m:+p[1]}}
+function lbl(k){var p=pmk(k);return MN[p.m-1]+" "+p.y}
+function shft(k,n){var p=pmk(k);p.m+=n;while(p.m>12){p.m-=12;p.y++}while(p.m<1){p.m+=12;p.y--}return mk(p.y,p.m)}
+function moy(y){return Array.from({length:12},function(_,i){return mk(y,i+1)})}
+function dstr(){return NOW.toLocaleDateString("ti",{year:"numeric",month:"long",day:"numeric"})}
+function today(){return NOW.toISOString().slice(0,10)}
+function fnum(n){return Math.round(n||0).toLocaleString()}
+
+var DEF={churchName:"ማሓበር ዓዲ ቀይታ",amount:50,members:[{id:1,name:""},{id:2,name:""},{id:3,name:""}],payments:{},notes:{},memberNotes:{},adminPw:"adiqeyta2024",finance:[]};
+
+function load(){try{var r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return null}
+function save(d){try{localStorage.setItem(KEY,JSON.stringify(d));return true}catch(e){return false}}
+
+var S={
+  data:load()||JSON.parse(JSON.stringify(DEF)),
+  am:CUR,view:"month",selId:null,
+  showExp:false,auth:"choose",isAdmin:false,pwErr:"",
+  ny:Math.max(2026,NOW.getFullYear()),
+  halfYear:1,
+  ss:"idle",impTxt:"",impErr:"",modal:null,
+  ftype:"out",fyr:0,frate:120,
+  fitems:[{desc:"",nak:""}],
+  finDesc:"",finUSD:"",finNak:"",finDate:today()
+};
+
+["notes","memberNotes"].forEach(function(f){if(!S.data[f])S.data[f]={}});
+if(!S.data.finance)S.data.finance=[];
+
+var saveT=null;
+function doSave(){
+  var ok=save(S.data);S.ss=ok?"saved":"failed";
+  clearTimeout(saveT);saveT=setTimeout(function(){S.ss="idle";render()},2000);
+}
+
+function paid(id,k){return!!S.data.payments[id+"-"+k]}
+function tog(id,k){if(!S.isAdmin)return;S.data.payments[id+"-"+k]=!S.data.payments[id+"-"+k];doSave();render()}
+function updName(id,v){if(!S.isAdmin)return;S.data.members=S.data.members.map(function(m){return m.id===id?{id:m.id,name:v}:m});doSave()}
+function addMem(){if(!S.isAdmin)return;var id=S.data.members.length?Math.max.apply(null,S.data.members.map(function(m){return m.id}))+1:1;S.data.members.push({id:id,name:""});doSave();render()}
+function delMem(id){if(!S.isAdmin)return;S.data.members=S.data.members.filter(function(m){return m.id!==id});doSave();render()}
+
+function relMo(){
+  var rec={};Object.keys(S.data.payments).forEach(function(k){var p=k.split("-");rec[mk(p[0],parseInt(p[1]))]=1});
+  var near=[];for(var i=-3;i<=6;i++)near.push(shft(CUR,i));
+  var u={};near.concat(Object.keys(rec)).forEach(function(m){u[m]=1});
+  return Object.keys(u).sort();
+}
+
+function tryLogin(pw){
+  if(pw===(S.data.adminPw||"adiqeyta2024")){S.isAdmin=true;S.auth="app";S.pwErr="";render()}
+  else{S.pwErr="❌ ዘይቅቡል password";render()}
+}
+
+function expJSON(){
+  var b=new Blob([JSON.stringify(S.data,null,2)],{type:"application/json"});
+  var u=URL.createObjectURL(b);var a=document.createElement("a");
+  a.href=u;a.download="mahaber_"+today()+".json";a.click();URL.revokeObjectURL(u);
+}
+
+function doImp(){
+  try{
+    var p=JSON.parse(S.impTxt);if(!p.members||!p.payments)throw 0;
+    S.data=Object.assign({},JSON.parse(JSON.stringify(DEF)),p);
+    ["notes","memberNotes"].forEach(function(f){if(!S.data[f])S.data[f]={}});
+    if(!S.data.finance)S.data.finance=[];
+    S.impTxt="";S.impErr="";S.showExp=false;doSave();render();
+  }catch(e){S.impErr="❌ ዘይቅቡል ፋይል";render()}
+}
+
+function openRcpt(id,mk2){
+  var mem=S.data.members.filter(function(m){return m.id===id})[0];
+  S.modal={t:"rcpt",mem:mem,mk:mk2,paid:paid(id,mk2),rno:"RCP-"+Date.now().toString().slice(-6)};render();
+}
+
+function shareRcpt(){
+  var m=S.modal;if(!m)return;var p=m.paid;
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ቅብሊት</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Segoe UI",Arial,sans-serif;background:#f1f3f4;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.b{background:#fffef0;border:3px dashed #ccc;border-radius:16px;padding:24px;width:100%;max-width:380px}.ch{text-align:center;color:#1a73e8;font-size:18px;font-weight:bold}.su{text-align:center;color:#888;font-size:12px;margin-bottom:14px}.rw{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid #f0f0f0}.big{font-size:15px;font-weight:bold;border:none;margin-top:4px}.st{text-align:center;margin:16px 0 8px}.st span{display:inline-block;border:3px solid '+(p?"#188038":"#d93025")+';color:'+(p?"#188038":"#d93025")+';font-weight:bold;padding:7px 20px;border-radius:6px;font-size:17px;transform:rotate(-5deg)}.ft{text-align:center;color:#aaa;font-size:12px;margin-top:12px}.pb{margin-top:22px;width:100%;padding:14px;background:#1a73e8;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer}@media print{.pb{display:none}body{background:#fff}}</style></head><body><div class="b"><div class="ch">⛪ '+S.data.churchName+'</div><div class="su">ወርሓዊ ክፍሊት ቅብሊት</div><div class="rw"><span style="color:#aaa">No:</span><span style="color:#aaa">'+m.rno+'</span></div><div class="rw"><span>ዕለት:</span><span>'+dstr()+'</span></div><div class="rw big"><span>ስም:</span><span>'+(m.mem.name||"—")+'</span></div><div class="rw"><span>ወርሒ:</span><span>'+lbl(m.mk)+'</span></div><div class="rw big"><span>ዝኸፈሎ:</span><span style="color:#188038">$'+S.data.amount+'</span></div><div class="st"><span>'+(p?"✅ ተከፊሉ":"❌ ኣይከፈለን")+'</span></div><div class="ft">ኣምላኽ ይሃብካ 🙏</div><button class="pb" onclick="window.print()">🖨️ Print / PDF</button></div></body></html>';
+  var b=new Blob([h],{type:"text/html;charset=utf-8"});window.open(URL.createObjectURL(b),"_blank");
+}
+
+function openNotes(type,key,title){
+  if(!S.isAdmin)return;
+  var val=(type==="month"?S.data.notes:S.data.memberNotes)[key]||"";
+  S.modal={t:"notes",ntype:type,key:key,title:title,val:val};render();
+}
+
+function saveNote(){
+  var ta=document.getElementById("nta");if(!ta)return;
+  if(S.modal.ntype==="month")S.data.notes[S.modal.key]=ta.value;
+  else S.data.memberNotes[S.modal.key]=ta.value;
+  doSave();
+  var st=document.getElementById("nst");if(st){st.textContent="✓ ተሓዚሉ";setTimeout(function(){if(st)st.textContent=""},1500)}
+}
+
+function closeModal(){S.modal=null;render()}
+
+function printReport(){
+  var d=S.data,am=S.am,ms=d.members,amt=d.amount;
+  var pd=ms.filter(function(m){return paid(m.id,am)});
+  var up=ms.filter(function(m){return !paid(m.id,am)});
+  var tot=pd.length*amt;
+  var rows="";
+  ms.forEach(function(m,i){var p=paid(m.id,am);rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:8px">'+(i+1)+'</td><td style="padding:8px;font-weight:bold">'+(m.name||"—")+'</td><td style="padding:8px;text-align:center;color:'+(p?"#188038":"#d93025")+';font-weight:bold">'+(p?"✓ ከፊሉ":"✗ ኣይከፈለን")+'</td><td style="padding:8px;text-align:right;color:'+(p?"#188038":"#aaa")+'">'+(p?"$"+amt:"—")+'</td></tr>'});
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ሪፖርት — '+lbl(am)+'</title><style>body{font-family:"Segoe UI",Arial,sans-serif;padding:30px;max-width:700px;margin:0 auto}h1{color:#1a73e8}h2{color:#555;font-size:14px;font-weight:normal;margin-bottom:18px}table{width:100%;border-collapse:collapse;margin-bottom:18px}thead{background:#1a73e8;color:#fff}thead td{padding:10px;font-weight:bold}.sm{display:flex;gap:14px;background:#f1f3f4;border-radius:8px;padding:14px;margin-bottom:18px;flex-wrap:wrap}.sc .v{font-size:20px;font-weight:bold}.sc .l{font-size:11px;color:#666}@media print{button{display:none}}</style></head><body>';
+  h+='<h1>⛪ '+d.churchName+'</h1><h2>ወርሓዊ ሪፖርት — '+lbl(am)+'</h2>';
+  h+='<div class="sm"><div class="sc"><div class="v" style="color:#1a73e8">'+ms.length+'</div><div class="l">ኣባላት</div></div><div class="sc"><div class="v" style="color:#188038">'+pd.length+'</div><div class="l">ዝኸፈሉ</div></div><div class="sc"><div class="v" style="color:#d93025">'+up.length+'</div><div class="l">ዘይከፈሉ</div></div><div class="sc"><div class="v" style="color:#e37400">$'+tot+'</div><div class="l">ዝተኣከበ</div></div></div>';
+  h+='<table><thead><tr><td>#</td><td>ሽም ኣባል</td><td style="text-align:center">ኩነታት</td><td style="text-align:right">ክፍሊት</td></tr></thead><tbody>'+rows+'</tbody></table>';
+  h+='<div style="background:#e8f0fe;border-radius:8px;padding:14px;display:flex;justify-content:space-between;font-weight:bold;font-size:16px"><span>ድምር:</span><span style="color:#188038">$'+tot+'</span></div>';
+  if(up.length){h+='<div style="background:#fce8e6;border-radius:8px;padding:14px;margin-top:10px"><div style="font-weight:bold;color:#d93025;margin-bottom:8px">⚠️ ዘይከፈሉ</div>';up.forEach(function(m,i){h+='<div style="color:#c62828;font-size:13px">'+(i+1)+'. '+(m.name||"—")+'</div>'});h+='</div>'}
+  h+='<div style="text-align:center;margin-top:20px"><button onclick="window.print()" style="background:#1a73e8;color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:15px;cursor:pointer">🖨️ Print / PDF</button></div></body></html>';
+  var b=new Blob([h],{type:"text/html;charset=utf-8"});window.open(URL.createObjectURL(b),"_blank");
+}
+
+function printHalfYearReport(){
+  var d=S.data,ny=S.ny,ms=d.members,amt=d.amount;
+  var half=S.halfYear||1;
+  var startM=half===1?1:7;
+  var endM=half===1?6:12;
+  var halfMks=[];
+  for(var m=startM;m<=endM;m++)halfMks.push(mk(ny,m));
+  var halfLabel=(half===1?"ቀዳማይ":"ካልኣይ")+" 6 ወርሒ — "+ny;
+  var totCollected=halfMks.reduce(function(s,k){return s+ms.filter(function(m){return paid(m.id,k)}).length*amt},0);
+  var totPossible=ms.length*6*amt;
+  var thead='<tr><th style="padding:8px;text-align:left;background:#1a73e8;color:#fff;position:sticky;left:0">ሽም ኣባል</th>';
+  halfMks.forEach(function(k){var p=pmk(k);thead+='<th style="padding:6px 4px;background:#1a73e8;color:#fff;font-size:11px;min-width:45px">'+MN[p.m-1]+'</th>'});
+  thead+='<th style="padding:8px;background:#0d47a1;color:#fff">ድምር</th></tr>';
+  var tbody="";
+  ms.forEach(function(m,i){
+    var pm=halfMks.filter(function(k){return paid(m.id,k)});
+    var bg=i%2===0?"#fff":"#f8f9fa";
+    tbody+='<tr style="background:'+bg+'"><td style="padding:7px 8px;font-weight:bold;border-right:2px solid #dadce0;position:sticky;left:0;background:'+bg+'">'+(m.name||"ኣባል "+(i+1))+'</td>';
+    halfMks.forEach(function(k){var p=paid(m.id,k);tbody+='<td style="text-align:center;padding:5px 2px;background:'+(p?"#e6f4ea":"#fce8e6")+';color:'+(p?"#188038":"#d93025")+';font-weight:bold;font-size:14px">'+(p?"✓":"✗")+'</td>'});
+    tbody+='<td style="text-align:center;font-weight:bold;padding:7px 5px;color:'+(pm.length===6?"#188038":pm.length>0?"#e37400":"#d93025")+'">'+(pm.length*amt>0?"$"+(pm.length*amt):"$0")+'</td></tr>';
+  });
+  tbody+='<tr style="background:#e8f0fe;font-weight:bold"><td style="padding:7px 8px;color:#1a73e8;border-right:2px solid #dadce0;position:sticky;left:0;background:#e8f0fe">ድምር</td>';
+  halfMks.forEach(function(k){var c=ms.filter(function(m){return paid(m.id,k)}).length;tbody+='<td style="text-align:center;padding:5px 2px;color:'+(c===ms.length?"#188038":"#d93025")+';font-size:12px">'+c+'/'+ms.length+'</td>'});
+  tbody+='<td style="text-align:center;color:#1a73e8;font-weight:bold;padding:7px 5px">$'+totCollected+'</td></tr>';
+  var unpaidRows="";
+  ms.forEach(function(m,i){
+    var unpaidMks=halfMks.filter(function(k){return !paid(m.id,k)});
+    if(unpaidMks.length>0&&m.name.trim()){unpaidRows+='<tr style="border-bottom:1px solid #eee"><td style="padding:7px 8px;font-weight:bold">'+m.name+'</td><td style="padding:7px 8px;color:#d93025">'+unpaidMks.map(function(k){return lbl(k)}).join(", ")+'</td><td style="padding:7px 8px;text-align:right;color:#d93025;font-weight:bold">$'+(unpaidMks.length*amt)+'</td></tr>'}
+  });
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ሪፖርት — '+halfLabel+'</title><style>body{font-family:"Segoe UI",Arial,sans-serif;padding:20px;max-width:850px;margin:0 auto}h1{color:#1a73e8;font-size:18px;margin-bottom:4px}h2{color:#555;font-size:13px;font-weight:normal;margin-bottom:16px}h3{color:#333;font-size:14px;margin:18px 0 8px;border-bottom:2px solid #dadce0;padding-bottom:6px}table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:12px}.sm{display:flex;gap:12px;background:#f1f3f4;border-radius:8px;padding:14px;margin-bottom:18px;flex-wrap:wrap}.sc{text-align:center;min-width:90px}.sc .v{font-size:18px;font-weight:bold}.sc .l{font-size:10px;color:#666;margin-top:3px}thead th{background:#1a73e8;color:#fff;padding:8px 5px}@media print{button{display:none}}</style></head><body>';
+  h+='<h1>⛪ '+d.churchName+'</h1><h2>ናይ '+halfLabel+' ጸብጻብ ሪፖርት</h2>';
+  h+='<div class="sm"><div class="sc"><div class="v" style="color:#1a73e8">'+ms.length+'</div><div class="l">ጠቕ ኣባላት</div></div><div class="sc"><div class="v" style="color:#188038">$'+totCollected+'</div><div class="l">ዝተኣከበ</div></div><div class="sc"><div class="v" style="color:#1a73e8">$'+totPossible+'</div><div class="l">ዝተጸበ</div></div><div class="sc"><div class="v" style="color:#d93025">$'+(totPossible-totCollected)+'</div><div class="l">ዘይተሰብሰበ</div></div></div>';
+  h+='<h3>📋 ናይ ኩሎም ኣባላት ኩነታት</h3><div style="overflow-x:auto"><table><thead><tr>'+thead+'</tr></thead><tbody>'+tbody+'</tbody></table></div>';
+  if(unpaidRows){h+='<h3>⚠️ ዘይከፈሉ ኣባላት</h3><table style="border:1px solid #f5c6c2"><thead><tr><th style="padding:8px;text-align:left;background:#d93025;color:#fff">ሽም ኣባል</th><th style="padding:8px;text-align:left;background:#d93025;color:#fff">ዘይከፈለሉ ወርሓት</th><th style="padding:8px;text-align:right;background:#d93025;color:#fff">ዝተፈለ</th></tr></thead><tbody>'+unpaidRows+'</tbody></table>'}
+  h+='<div style="background:#e8f0fe;border-radius:8px;padding:14px;display:flex;justify-content:space-between;font-weight:bold;font-size:15px;margin-top:10px"><span>ጠቕላላ ዝተኣከበ:</span><span style="color:#188038">$'+totCollected+'</span></div>';
+  h+='<div style="text-align:center;margin-top:24px"><button onclick="window.print()" style="background:#1a73e8;color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:15px;cursor:pointer">🖨️ Print / PDF</button></div>';
+  h+='<div style="text-align:center;color:#aaa;font-size:11px;margin-top:16px">'+d.churchName+' • '+halfLabel+' • ዕለት: '+dstr()+'</div></body></html>';
+  var b=new Blob([h],{type:"text/html;charset=utf-8"});window.open(URL.createObjectURL(b),"_blank");
+}
+
+function printYearReport(){
+  var d=S.data,ny=S.ny,ms=d.members,amt=d.amount;
+  var ymks=moy(ny);
+  var yt=ymks.reduce(function(s,k){return s+ms.filter(function(m){return paid(m.id,k)}).length*amt},0);
+  var yp=ms.length*12*amt;
+  var thead='<tr><th style="padding:8px;text-align:left;background:#1a73e8;color:#fff;position:sticky;left:0">ሽም</th>';
+  MN.forEach(function(mn){thead+='<th style="padding:5px 2px;background:#1a73e8;color:#fff;font-size:10px;min-width:30px">'+mn.slice(0,2)+'</th>'});
+  thead+='<th style="padding:8px;background:#0d47a1;color:#fff">ድምር</th></tr>';
+  var tbody="";
+  ms.forEach(function(m,i){
+    var pm=ymks.filter(function(k){return paid(m.id,k)});
+    var bg=i%2===0?"#fff":"#f8f9fa";
+    tbody+='<tr style="background:'+bg+'"><td style="padding:7px 8px;font-weight:bold;border-right:2px solid #dadce0;position:sticky;left:0;background:'+bg+'">'+(m.name||"ኣባል "+(i+1))+'</td>';
+    ymks.forEach(function(k){var p=paid(m.id,k);tbody+='<td style="text-align:center;padding:4px 2px;background:'+(p?"#e6f4ea":"#fce8e6")+';color:'+(p?"#188038":"#d93025")+';font-weight:bold">'+(p?"✓":"·")+'</td>'});
+    tbody+='<td style="text-align:center;font-weight:bold;color:'+(pm.length===12?"#188038":pm.length>0?"#e37400":"#d93025")+'">$'+(pm.length*amt)+'</td></tr>';
+  });
+  tbody+='<tr style="background:#e8f0fe;font-weight:bold"><td style="padding:7px 8px;color:#1a73e8;border-right:2px solid #dadce0;position:sticky;left:0;background:#e8f0fe">ድምር</td>';
+  ymks.forEach(function(k){var c=ms.filter(function(m){return paid(m.id,k)}).length;tbody+='<td style="text-align:center;color:'+(c===ms.length?"#188038":"#d93025")+';font-size:10px">'+c+'</td>'});
+  tbody+='<td style="text-align:center;color:#1a73e8;font-weight:bold">$'+yt+'</td></tr>';
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ናይ ዓመት ሪፖርት — '+ny+'</title><style>body{font-family:"Segoe UI",Arial,sans-serif;padding:20px;max-width:900px;margin:0 auto}h1{color:#1a73e8;font-size:18px}h2{color:#555;font-size:13px;font-weight:normal;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:12px}.sm{display:flex;gap:12px;background:#f1f3f4;border-radius:8px;padding:14px;margin-bottom:18px;flex-wrap:wrap}.sc{text-align:center;min-width:90px}.sc .v{font-size:18px;font-weight:bold}.sc .l{font-size:10px;color:#666;margin-top:3px}@media print{button{display:none}}</style></head><body>';
+  h+='<h1>⛪ '+d.churchName+'</h1><h2>ናይ ዓመት ሪፖርት — '+ny+'</h2>';
+  h+='<div class="sm"><div class="sc"><div class="v" style="color:#1a73e8">'+ms.length+'</div><div class="l">ኣባላት</div></div><div class="sc"><div class="v" style="color:#188038">$'+yt+'</div><div class="l">ዝተኣከበ</div></div><div class="sc"><div class="v" style="color:#1a73e8">$'+yp+'</div><div class="l">ዝተጸበ</div></div><div class="sc"><div class="v" style="color:#d93025">$'+(yp-yt)+'</div><div class="l">ዘይተሰብሰበ</div></div></div>';
+  h+='<div style="overflow-x:auto"><table><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table></div>';
+  h+='<div style="text-align:center;margin-top:20px"><button onclick="window.print()" style="background:#1a73e8;color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:15px;cursor:pointer">🖨️ Print / PDF</button></div>';
+  h+='<div style="text-align:center;color:#aaa;font-size:11px;margin-top:16px">'+d.churchName+' • '+ny+' • ዕለት: '+dstr()+'</div></body></html>';
+  var b=new Blob([h],{type:"text/html;charset=utf-8"});window.open(URL.createObjectURL(b),"_blank");
+}
+
+function printFinReport(){
+  var d=S.data;
+  var fin=d.finance||[];
+  var filt=fin.filter(function(r){return S.fyr===0||r.date.startsWith(String(S.fyr))});
+  var fi=filt.filter(function(r){return r.type==="in"});
+  var fo=filt.filter(function(r){return r.type==="out"});
+  var fiN=fi.reduce(function(s,r){return s+(r.nak||0)},0);
+  var fiUSD=fi.reduce(function(s,r){return s+(r.usd||0)},0);
+  var foN=fo.reduce(function(s,r){return s+(r.nak||0)},0);
+  var bal=fiN-foN;
+  var title=S.fyr===0?"ኩሉ ዓመታት":String(S.fyr);
+  var inRows="";fi.forEach(function(r){inRows+='<tr style="border-bottom:1px solid #eee"><td style="padding:7px">'+r.date+'</td><td style="padding:7px;font-weight:bold">'+r.desc+'</td><td style="padding:7px;text-align:right;color:#188038">$'+(r.usd||0)+'</td><td style="padding:7px;text-align:right;color:#188038">'+fnum(r.nak)+' ናቅፋ</td></tr>'});
+  var outRows="";fo.forEach(function(r){outRows+='<tr style="border-bottom:1px solid #eee"><td style="padding:7px">'+r.date+'</td><td style="padding:7px;font-weight:bold">'+r.desc+'</td><td style="padding:7px;text-align:right;color:#d93025">'+fnum(r.nak)+' ናቅፋ</td></tr>'});
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ናይ ሒሳብ ሪፖርት</title><style>body{font-family:"Segoe UI",Arial,sans-serif;padding:30px;max-width:750px;margin:0 auto}h1{color:#1a73e8;font-size:20px}h2{color:#555;font-size:14px;font-weight:normal;margin-bottom:20px}h3{color:#333;font-size:15px;margin:20px 0 10px;border-bottom:2px solid #1a73e8;padding-bottom:6px}table{width:100%;border-collapse:collapse;margin-bottom:16px}thead{background:#1a73e8;color:#fff}thead td{padding:10px;font-weight:bold}.sm{display:flex;gap:16px;background:#f1f3f4;border-radius:8px;padding:16px;margin-bottom:20px;flex-wrap:wrap}.sc{text-align:center;min-width:100px}.sc .v{font-size:18px;font-weight:bold}.sc .l{font-size:11px;color:#666;margin-top:3px}@media print{button{display:none}}</style></head><body>';
+  h+='<h1>⛪ '+d.churchName+'</h1><h2>ናይ ሒሳብ ሪፖርት — '+title+'</h2>';
+  h+='<div class="sm"><div class="sc"><div class="v" style="color:#188038">$'+fiUSD+'</div><div class="l">ጠቕ ኣታዊ ($)</div></div><div class="sc"><div class="v" style="color:#188038">'+fnum(fiN)+' ናቅፋ</div><div class="l">ጠቕ ኣታዊ</div></div><div class="sc"><div class="v" style="color:#d93025">'+fnum(foN)+' ናቅፋ</div><div class="l">ጠቕ ወጻኢ</div></div><div class="sc"><div class="v" style="color:'+(bal>=0?"#188038":"#d93025")+'">'+(bal>=0?"":"-")+fnum(Math.abs(bal))+' ናቅፋ</div><div class="l">ሚዛን</div></div></div>';
+  if(fi.length){h+='<h3>💰 ኣታዊ</h3><table><thead><tr><td>ዕለት</td><td>መግለጺ</td><td style="text-align:right">$</td><td style="text-align:right">ናቅፋ</td></tr></thead><tbody>'+inRows+'</tbody><tfoot><tr style="background:#e6f4ea"><td colspan="2" style="padding:8px;font-weight:bold">ጠቕላላ:</td><td style="padding:8px;text-align:right;font-weight:bold;color:#188038">$'+fiUSD+'</td><td style="padding:8px;text-align:right;font-weight:bold;color:#188038">'+fnum(fiN)+' ናቅፋ</td></tr></tfoot></table>'}
+  if(fo.length){h+='<h3>🛒 ወጻኢ</h3><table><thead><tr><td>ዕለት</td><td>ዝተገዝአ ንብረት</td><td style="text-align:right">ናቅፋ</td></tr></thead><tbody>'+outRows+'</tbody><tfoot><tr style="background:#fce8e6"><td colspan="2" style="padding:8px;font-weight:bold">ጠቕላላ:</td><td style="padding:8px;text-align:right;font-weight:bold;color:#d93025">'+fnum(foN)+' ናቅፋ</td></tr></tfoot></table>'}
+  h+='<div style="background:#e8f0fe;border-radius:8px;padding:16px;display:flex;justify-content:space-between;font-size:16px;font-weight:bold"><span>💵 ሚዛን:</span><span style="color:'+(bal>=0?"#188038":"#d93025")+'">'+(bal>=0?"":"-")+fnum(Math.abs(bal))+' ናቅፋ</span></div>';
+  h+='<div style="text-align:center;margin-top:24px"><button onclick="window.print()" style="background:#1a73e8;color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:15px;cursor:pointer">🖨️ Print / PDF</button></div></body></html>';
+  var b=new Blob([h],{type:"text/html;charset=utf-8"});window.open(URL.createObjectURL(b),"_blank");
+}
+
+function shareFinReport(){
+  var d=S.data;
+  var fin=d.finance||[];
+  var filt=fin.filter(function(r){return S.fyr===0||r.date.startsWith(String(S.fyr))});
+  var fi=filt.filter(function(r){return r.type==="in"});
+  var fo=filt.filter(function(r){return r.type==="out"});
+  var fiN=fi.reduce(function(s,r){return s+(r.nak||0)},0);
+  var fiUSD=fi.reduce(function(s,r){return s+(r.usd||0)},0);
+  var foN=fo.reduce(function(s,r){return s+(r.nak||0)},0);
+  var bal=fiN-foN;
+  var title=S.fyr===0?"ኩሉ ዓመታት":String(S.fyr);
+  var inRows="";fi.forEach(function(r){inRows+='<tr><td style="padding:6px;border:1px solid #ddd">'+r.date+'</td><td style="padding:6px;border:1px solid #ddd;font-weight:bold">'+r.desc+'</td><td style="padding:6px;border:1px solid #ddd;text-align:right;color:#188038">$'+(r.usd||0)+'</td><td style="padding:6px;border:1px solid #ddd;text-align:right;color:#188038">'+fnum(r.nak)+' ናቅፋ</td></tr>'});
+  var outRows="";fo.forEach(function(r){outRows+='<tr><td style="padding:6px;border:1px solid #ddd">'+r.date+'</td><td style="padding:6px;border:1px solid #ddd;font-weight:bold">'+r.desc+'</td><td style="padding:6px;border:1px solid #ddd;text-align:right;color:#d93025">'+fnum(r.nak)+' ናቅፋ</td></tr>'});
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ናይ ሒሳብ ሪፖርት</title><style>body{font-family:"Segoe UI",Arial,sans-serif;padding:24px;max-width:700px;margin:0 auto;font-size:13px}h1{color:#1a73e8;font-size:18px;margin-bottom:4px}h2{color:#555;font-size:12px;font-weight:normal;margin-bottom:14px}h3{color:#333;font-size:14px;margin:16px 0 8px;border-bottom:2px solid #1a73e8;padding-bottom:4px}table{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:12px}th{background:#1a73e8;color:#fff;padding:7px 6px;text-align:left}.sm{display:flex;gap:10px;background:#f1f3f4;border-radius:8px;padding:12px;margin-bottom:14px;flex-wrap:wrap}.sc{text-align:center;min-width:80px}.sc .v{font-size:16px;font-weight:bold}.sc .l{font-size:10px;color:#666;margin-top:2px}.share-btn{display:none}@media print{.share-btn{display:none}}</style></head><body>';
+  h+='<h1>⛪ '+d.churchName+'</h1><h2>ናይ ሒሳብ ሪፖርት — '+title+' &nbsp;|&nbsp; ዕለት: '+dstr()+'</h2>';
+  h+='<div class="sm"><div class="sc"><div class="v" style="color:#188038">$'+fiUSD+'</div><div class="l">ጠቕ ኣታዊ ($)</div></div><div class="sc"><div class="v" style="color:#188038">'+fnum(fiN)+' ናቅፋ</div><div class="l">ጠቕ ኣታዊ</div></div><div class="sc"><div class="v" style="color:#d93025">'+fnum(foN)+' ናቅፋ</div><div class="l">ጠቕ ወጻኢ</div></div><div class="sc"><div class="v" style="color:'+(bal>=0?"#188038":"#d93025")+'">'+(bal>=0?"":"-")+fnum(Math.abs(bal))+' ናቅፋ</div><div class="l">ሚዛን</div></div></div>';
+  if(fi.length){h+='<h3>💰 ኣታዊ</h3><table><thead><tr><th>ዕለት</th><th>መግለጺ</th><th style="text-align:right">$</th><th style="text-align:right">ናቅፋ</th></tr></thead><tbody>'+inRows+'</tbody><tfoot><tr style="background:#e6f4ea"><td colspan="2" style="padding:7px;font-weight:bold">ጠቕላላ:</td><td style="padding:7px;text-align:right;font-weight:bold;color:#188038">$'+fiUSD+'</td><td style="padding:7px;text-align:right;font-weight:bold;color:#188038">'+fnum(fiN)+' ናቅፋ</td></tr></tfoot></table>'}
+  if(fo.length){h+='<h3>🛒 ወጻኢ</h3><table><thead><tr><th>ዕለት</th><th>ዝተገዝአ ንብረት</th><th style="text-align:right">ናቅፋ</th></tr></thead><tbody>'+outRows+'</tbody><tfoot><tr style="background:#fce8e6"><td colspan="2" style="padding:7px;font-weight:bold">ጠቕላላ:</td><td style="padding:7px;text-align:right;font-weight:bold;color:#d93025">'+fnum(foN)+' ናቅፋ</td></tr></tfoot></table>'}
+  h+='<div style="background:#e8f0fe;border-radius:8px;padding:12px;display:flex;justify-content:space-between;font-size:15px;font-weight:bold"><span>💵 ሚዛን:</span><span style="color:'+(bal>=0?"#188038":"#d93025")+'">'+(bal>=0?"":"-")+fnum(Math.abs(bal))+' ናቅፋ</span></div>';
+  h+='<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">';
+  h+='<button onclick="window.print()" style="flex:1;padding:12px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer">🖨️ Print / PDF</button>';
+  h+='<button onclick="doShare()" style="flex:1;padding:12px;background:#25D366;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer">📤 WhatsApp / Telegram</button>';
+  h+='</div>';
+  h+='<script>function doShare(){var text="⛪ '+d.churchName+'\\nናይ ሒሳብ ሪፖርት — '+title+'\\n\\n💰 ኣታዊ: $'+fiUSD+' → '+fnum(fiN)+' ናቅፋ\\n🛒 ወጻኢ: '+fnum(foN)+' ናቅፋ\\n💵 ሚዛን: '+(bal>=0?"":"-")+fnum(Math.abs(bal))+' ናቅፋ\\n\\nዕለት: '+dstr()+'";if(navigator.share){navigator.share({title:"ናይ ሒሳብ ሪፖርት",text:text})}else{var enc=encodeURIComponent(text);window.open("https://wa.me/?text="+enc,"_blank")}}<\/script>';
+  h+='</body></html>';
+  var b=new Blob([h],{type:"text/html;charset=utf-8"});window.open(URL.createObjectURL(b),"_blank");
+}
+
+function shareMonthNotes(){
+  var d=S.data,am=S.am;
+  var mn=d.notes[am]||"";
+  var ms=d.members,amt=d.amount;
+  var pc=ms.filter(function(m){return paid(m.id,am)}).length;
+  var uc=ms.length-pc;
+  var tc=pc*amt;
+  var unp=ms.filter(function(m){return !paid(m.id,am)&&m.name.trim()});
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ሕጊ — '+lbl(am)+'</title><style>body{font-family:"Segoe UI",Arial,sans-serif;padding:24px;max-width:600px;margin:0 auto;font-size:13px}h1{color:#1a73e8;font-size:18px;margin-bottom:4px}h2{color:#555;font-size:12px;font-weight:normal;margin-bottom:14px}.sm{display:flex;gap:10px;background:#f1f3f4;border-radius:8px;padding:12px;margin-bottom:14px;flex-wrap:wrap}.sc{text-align:center;min-width:80px}.sc .v{font-size:16px;font-weight:bold}.sc .l{font-size:10px;color:#666;margin-top:2px}.note{background:#fef9e7;border:1px solid #f5d56a;border-radius:8px;padding:14px;font-size:13px;color:#555;white-space:pre-wrap;line-height:1.6;margin-bottom:14px}@media print{.share-btn{display:none}}</style></head><body>';
+  h+='<h1>⛪ '+d.churchName+'</h1><h2>'+lbl(am)+' — ሕጊ/ሓሳብ &nbsp;|&nbsp; ዕለት: '+dstr()+'</h2>';
+  h+='<div class="sm"><div class="sc"><div class="v" style="color:#1a73e8">'+ms.length+'</div><div class="l">ኣባላት</div></div><div class="sc"><div class="v" style="color:#188038">'+pc+'</div><div class="l">ከፊሎም</div></div><div class="sc"><div class="v" style="color:#d93025">'+uc+'</div><div class="l">ዘይከፈሉ</div></div><div class="sc"><div class="v" style="color:#e37400">$'+tc+'</div><div class="l">ዝተኣከበ</div></div></div>';
+  h+='<h3 style="color:#333;font-size:14px;margin:0 0 8px;border-bottom:2px solid #f5d56a;padding-bottom:4px">📝 ሕጊ/ሓሳብ</h3>';
+  h+=(mn?'<div class="note">'+mn+'</div>':'<div style="color:#bbb;font-size:12px;font-style:italic;margin-bottom:14px">ሕጊ ወይ ሓሳብ ኣይተጸሓፈን</div>');
+  if(unp.length){h+='<div style="background:#fce8e6;border-radius:8px;padding:12px;margin-bottom:14px"><div style="font-weight:bold;color:#d93025;margin-bottom:6px">⚠️ ዘይከፈሉ ('+unp.length+')</div>';unp.forEach(function(m,i){h+='<div style="color:#c62828;font-size:12px;padding:2px 0">'+(i+1)+'. '+m.name+'</div>'});h+='</div>'}
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap">';
+  h+='<button onclick="window.print()" style="flex:1;padding:12px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer">🖨️ Print / PDF</button>';
+  h+='<button onclick="doShare()" style="flex:1;padding:12px;background:#25D366;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer">📤 WhatsApp / Telegram</button>';
+  h+='</div>';
+  var shareText="⛪ "+d.churchName+"\\n"+lbl(am)+" ሕጊ/ሓሳብ\\n\\n";
+  if(mn)shareText+=mn+"\\n\\n";
+  shareText+="💰 ዝተኣከበ: $"+tc+"\\n✓ ከፊሎም: "+pc+" | ✗ ዘይከፈሉ: "+uc;
+  if(unp.length){shareText+="\\n\\n⚠️ ዘይከፈሉ:\\n";unp.forEach(function(m,i){shareText+=(i+1)+". "+m.name+"\\n"})}
+  shareText+="\\nዕለት: "+dstr();
+  h+='<script>function doShare(){var text="'+shareText.replace(/\n/g,"\\n").replace(/"/g,'\\"')+'";if(navigator.share){navigator.share({title:"'+lbl(am)+' ሕጊ",text:text})}else{var enc=encodeURIComponent(text);window.open("https://wa.me/?text="+enc,"_blank")}}<\/script>';
+  h+='</body></html>';
+  var b=new Blob([h],{type:"text/html;charset=utf-8"});window.open(URL.createObjectURL(b),"_blank");
+}
+
+function addFin(){
+  if(S.ftype==="out"){
+    var items=S.fitems||[];
+    var ok=items.filter(function(it){return it.desc&&it.desc.trim()&&it.nak&&parseFloat(it.nak)>0});
+    if(!ok.length){alert("ንብረትን ዋጋን ምልእ!");return}
+    ok.forEach(function(it){S.data.finance.push({type:"out",date:S.finDate||today(),desc:it.desc.trim(),nak:parseFloat(it.nak),usd:0})});
+    S.fitems=[{desc:"",nak:""}];
+  } else {
+    if(!S.finDesc||!S.finDesc.trim()){alert("መግለጺ ጸሓፍ!");return}
+    if(!S.finUSD){alert("$ ጸሓፍ!");return}
+    S.data.finance.push({type:"in",date:S.finDate||today(),desc:S.finDesc.trim(),usd:parseFloat(S.finUSD),nak:S.finNak?parseFloat(S.finNak):Math.round(parseFloat(S.finUSD)*S.frate)});
+    S.finDesc="";S.finUSD="";S.finNak="";
+  }
+  doSave();render();
+}
+
+function addFinItem(){S.fitems=S.fitems||[];S.fitems.push({desc:"",nak:""});render()}
+function updFinItem(i,f,v){if(S.fitems&&S.fitems[i])S.fitems[i][f]=v}
+function delFinItem(i){if(!S.fitems||S.fitems.length<=1)return;S.fitems.splice(i,1);render()}
+function delFin(i){var fin=S.data.finance;if(!fin||i<0||i>=fin.length)return;fin.splice(i,1);doSave();render()}
+
+function changePw(){
+  var p1=document.getElementById("np1"),p2=document.getElementById("np2"),er=document.getElementById("per");
+  if(!p1||!p2||!er)return;
+  if(p1.value.length<4){er.textContent="❌ 4 ፊደል ወሲኽ";return}
+  if(p1.value!==p2.value){er.textContent="❌ ክልቲኡ ሓደ ክኸውን";return}
+  S.data.adminPw=p1.value;doSave();er.style.color="#188038";er.textContent="✓ ተቐይሩ!";p1.value="";p2.value="";
+  setTimeout(function(){if(er){er.textContent="";er.style.color="#d93025"}},2000);
+}
+
+function crd(l,v,col,bg){return'<div class="card" style="background:'+bg+';border:1px solid '+col+'33"><div class="cv" style="color:'+col+'">'+v+'</div><div class="cl">'+l+'</div></div>'}
+
+function rModal(){
+  var m=S.modal;if(!m)return"";
+  if(m.t==="rcpt"){
+    var p=m.paid;
+    var rc='<div style="text-align:center;margin-bottom:10px"><div style="font-size:16px;font-weight:bold;color:#1a73e8">⛪ '+S.data.churchName+'</div></div><hr style="border:none;border-top:1px dashed #ccc;margin:8px 0"/><div style="display:flex;justify-content:space-between;font-size:12px;margin:3px 0"><span>No:</span><span style="color:#aaa">'+m.rno+'</span></div><div style="display:flex;justify-content:space-between;font-size:12px;margin:3px 0"><span>ዕለት:</span><span>'+dstr()+'</span></div><hr style="border:none;border-top:1px dashed #ccc;margin:8px 0"/><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:bold;margin:5px 0"><span>ስም:</span><span>'+(m.mem.name||"—")+'</span></div><div style="display:flex;justify-content:space-between;font-size:13px;margin:5px 0"><span>ወርሒ:</span><span>'+lbl(m.mk)+'</span></div><div style="display:flex;justify-content:space-between;font-size:15px;font-weight:bold;margin:5px 0"><span>ዝኸፈሎ:</span><span style="color:#188038">$'+S.data.amount+'</span></div><hr style="border:none;border-top:1px dashed #ccc;margin:8px 0"/><div style="text-align:center"><span style="display:inline-block;border:3px solid '+(p?"#188038":"#d93025")+';color:'+(p?"#188038":"#d93025")+';font-weight:bold;padding:4px 12px;border-radius:4px;font-size:13px">'+(p?"✅ ተከፊሉ":"❌ ኣይከፈለን")+'</span></div><div style="text-align:center;margin-top:10px;font-size:11px;color:#888">ኣምላኽ ይሃብካ 🙏</div>';
+    return'<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="mhdr"><span>🧾 ቅብሊት</span><button class="mcls" onclick="closeModal()">×</button></div><div class="mbdy"><div class="rcpt">'+rc+'</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="bblue" onclick="shareRcpt()">🖨️ Print/PDF</button>'+(S.isAdmin&&!p?'<button class="borg" onclick="tog('+m.mem.id+',\''+m.mk+'\');S.modal.paid=true;render()">✓ ከፊሉ</button>':"")+'</div></div></div></div>';
+  }
+  if(m.t==="notes"){
+    return'<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="mhdr"><span>📝 '+m.title+'</span><button class="mcls" onclick="closeModal()">×</button></div><div class="mbdy"><textarea id="nta" style="width:100%;min-height:120px;border:1px solid #dadce0;border-radius:8px;padding:10px;font-size:13px;resize:vertical;outline:none">'+m.val+'</textarea><div id="nst" style="font-size:11px;color:#188038;height:16px;margin-top:4px"></div></div><div class="mfoot"><button class="bgrey" onclick="closeModal()">ዕጸው</button><button class="bgreen" onclick="saveNote()">💾 ሓዝ</button></div></div></div>';
+  }
+  return"";
+}
+
+function rLogin(){
+  var h='<div class="loginwrap"><div class="loginbox">';
+  h+='<div style="text-align:center;color:#1a73e8;font-size:20px;font-weight:bold;margin-bottom:6px">⛪ '+S.data.churchName+'</div>';
+  h+='<div style="text-align:center;color:#888;font-size:13px;margin-bottom:24px">ወርሓዊ ክፍሊት ምክትታል</div>';
+  if(S.auth==="choose"){
+    h+='<button class="lbtn bblue" onclick="S.auth=\'la\';S.pwErr=\'\';render()" style="margin-bottom:12px">🔐 Admin ኮይነ እቶ</button>';
+    h+='<button class="lbtn bgreen" onclick="S.isAdmin=false;S.auth=\'app\';render()">👁️ ርኢ ጥራይ እቶ</button>';
+  } else {
+    h+='<div style="font-weight:bold;color:#555;margin-bottom:10px">Admin Password:</div>';
+    h+='<input id="pwi" class="inp" type="password" placeholder="password..." onkeydown="if(event.key===\'Enter\'){var v=document.getElementById(\'pwi\');if(v)tryLogin(v.value)}"/>';
+    h+='<div style="color:#d93025;font-size:12px;text-align:center;margin-bottom:8px;min-height:18px">'+S.pwErr+'</div>';
+    h+='<button class="lbtn bblue" onclick="var v=document.getElementById(\'pwi\');if(v)tryLogin(v.value)">እቶ →</button>';
+    h+='<button class="lbtn bgrey" onclick="S.auth=\'choose\';S.pwErr=\'\';render()">← ተመለስ</button>';
+  }
+  h+='</div></div>';return h;
+}
+
+function rApp(){
+  var d=S.data,am=S.am,v=S.view,ny=S.ny;
+  var ms=d.members,amt=d.amount,cn=d.churchName;
+  var dm=relMo();
+  var pc=ms.filter(function(m){return paid(m.id,am)}).length;
+  var uc=ms.length-pc;var tc=pc*amt;
+  var unp=ms.filter(function(m){return !paid(m.id,am)&&m.name.trim()});
+  var sel=ms.filter(function(m){return m.id===S.selId})[0]||null;
+  var ap=pmk(am);var ia=S.isAdmin;
+  var h="";
+
+  h+='<div class="topbar"><div class="toprow"><div style="flex:1;margin-right:8px">';
+  h+='<div style="font-weight:bold;font-size:14px">⛪ '+cn+'</div>';
+  h+='<div class="sub">ወርሓዊ $'+amt;
+  if(ia)h+='<span class="badge" style="background:rgba(255,255,255,.3)">🔐 Admin</span>';
+  if(S.ss==="saved")h+='<span class="badge">✓ ተሓዚሉ</span>';
+  h+='</div></div>';
+  if(ia)h+='<button class="tbtn" onclick="S.showExp=!S.showExp;render()">⚙️</button>';
+  h+='</div><div class="tabs">';
+  [["month","📋 ወርሒ"],["year","📆 ዓመት"],["overview","🗓 ሓፈሻ"],["member","👤 ኣባል"],["finance","💰 ሒሳብ"]].forEach(function(t){
+    h+='<button class="tab '+(v===t[0]?"ton":"toff")+'" onclick="S.view=\''+t[0]+'\';render()">'+t[1]+'</button>';
+  });
+  h+='</div></div>';
+
+  h+='<div class="vbanner">';
+  if(ia){h+='<span class="abadge">🔐 Admin</span><button class="bgrey" style="font-size:11px;padding:4px 10px" onclick="S.isAdmin=false;S.auth=\'choose\';render()">ውጻእ</button>'}
+  else{h+='<span class="vbadge">👁️ View mode</span><button class="bblue" style="font-size:11px;padding:4px 10px" onclick="S.auth=\'la\';S.pwErr=\'\';render()">Admin እቶ</button>'}
+  h+='</div>';
+
+  if(ia&&S.showExp){
+    h+='<div class="panel"><div style="font-weight:bold;color:#1a73e8;margin-bottom:10px">⚙️ ምቕያር</div>';
+    h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap"><span style="color:#555">ወርሓዊ ክፍሊት:</span><input id="amtinp" type="number" value="'+amt+'" min="1" style="width:70px;padding:6px;border:2px solid #1a73e8;border-radius:6px;font-size:14px;font-weight:bold;color:#1a73e8;outline:none"/><button class="bgreen" style="padding:6px 14px;border-radius:6px" onclick="var v=parseFloat(document.getElementById(\'amtinp\').value);if(!isNaN(v)&&v>0){S.data.amount=v;doSave();render()}">✓ ሓዝ</button></div>';
+    h+='<div style="font-weight:bold;color:#555;margin-bottom:8px;font-size:13px">🔑 Password ምቕያር</div>';
+    h+='<input id="np1" type="password" placeholder="ሓድሽ password..." class="inp"/>';
+    h+='<input id="np2" type="password" placeholder="ደግም..." class="inp"/>';
+    h+='<div id="per" style="color:#d93025;font-size:12px;min-height:16px;margin-bottom:6px"></div>';
+    h+='<button class="bgreen" style="width:100%;padding:10px" onclick="changePw()">✓ Password ቀይር</button>';
+    h+='<hr style="border:none;border-top:1px solid #eee;margin:14px 0"/>';
+    h+='<div style="font-weight:bold;color:#555;margin-bottom:8px">💾 Export / Import</div>';
+    h+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><button class="bblue" onclick="expJSON()">⬇️ Export</button><button class="bgreen" onclick="document.getElementById(\'fi\').click()">⬆️ Import</button><input id="fi" type="file" accept=".json" style="display:none" onchange="var r=new FileReader();r.onload=function(e){S.impTxt=e.target.result;render()};r.readAsText(this.files[0])"/></div>';
+    if(S.impTxt){
+      if(S.impErr)h+='<div style="color:#d93025;font-size:12px;margin-bottom:6px">'+S.impErr+'</div>';
+      h+='<div style="display:flex;gap:8px"><button class="bgreen" onclick="doImp()">✓ Import</button><button class="bgrey" onclick="S.impTxt=\'\';S.impErr=\'\';render()">ሰርዝ</button></div>';
+    }
+    h+='</div>';
+  }
+
+  if(v==="month"){
+    h+='<div class="mnav"><div class="pills">';
+    YRS.forEach(function(y){h+='<button class="pill '+(ap.y===y?"pon":"")+'" onclick="S.am=\''+mk(y,ap.m)+'\';render()">'+y+'</button>'});
+    h+='</div><div class="pills">';
+    MN.forEach(function(mn,i){var tmk=mk(ap.y,i+1);h+='<button class="pill '+(tmk===am?"pon":"")+" "+(tmk===CUR?"pcur":"")+'" onclick="S.am=\''+tmk+'\';render()">'+mn+'</button>'});
+    h+='</div></div>';
+    h+='<div class="sumrow">'+crd("ኣባላት",ms.length,"#1a73e8","#e8f0fe")+crd("ከፊሎም",pc,"#188038","#e6f4ea")+crd("ዘይከፈሉ",uc,"#d93025","#fce8e6")+crd("ዝተኣከበ","$"+tc,"#e37400","#fef3e2")+'</div>';
+    h+='<div class="mstrip"><button class="arr" onclick="S.am=shft(S.am,-1);render()">‹</button><div style="text-align:center"><span style="font-weight:bold;font-size:14px;color:#1a73e8">'+lbl(am)+'</span>'+(am===CUR?'<span style="margin-left:6px;font-size:11px;color:#1a73e8">● ሕጂ</span>':"")+'</div><button class="arr" onclick="S.am=shft(S.am,+1);render()">›</button></div>';
+    var cols=ia?"24px 1fr 84px 28px 24px":"24px 1fr 84px 28px";
+    h+='<div style="display:grid;grid-template-columns:'+cols+';background:#f1f3f4;border-bottom:2px solid #dadce0;padding:6px 12px;font-weight:bold;color:#555;font-size:11px"><div>#</div><div>ሽም ኣባል</div><div style="text-align:center">ኩነታት</div><div style="text-align:center">🧾</div>'+(ia?'<div></div>':"")+'</div>';
+    h+='<div style="padding:0 12px 8px">';
+    ms.forEach(function(m,i){
+      var p=paid(m.id,am);
+      h+='<div style="display:grid;grid-template-columns:'+cols+';align-items:center;background:'+(p?"#e6f4ea":"#fce8e6")+';border-bottom:1px solid '+(p?"#ceead6":"#f5c6c2")+';min-height:40px">';
+      h+='<div style="text-align:center;color:#aaa;font-size:11px;font-weight:bold">'+(i+1)+'</div>';
+      if(ia)h+='<input style="border:none;background:transparent;padding:6px 4px;font-size:12px;color:#202124;outline:none;width:100%" value="'+m.name.replace(/"/g,"&quot;")+'" placeholder="ኣባል '+(i+1)+'..." oninput="updName('+m.id+',this.value)"/>';
+      else h+='<div style="padding:6px 4px;font-size:12px;color:#202124">'+(m.name||"ኣባል "+(i+1))+'</div>';
+      if(ia)h+='<button style="margin:3px;padding:4px 0;border-radius:5px;border:none;color:#fff;font-weight:bold;font-size:10px;background:'+(p?"#188038":"#d93025")+';cursor:pointer;width:calc(100% - 6px)" onclick="tog('+m.id+',\''+am+'\')">'+(p?"✓ ከፊሉ":"✗ ኣይከፈለን")+'</button>';
+      else h+='<div style="text-align:center;font-weight:bold;color:'+(p?"#188038":"#d93025")+';font-size:13px">'+(p?"✓":"✗")+'</div>';
+      h+='<button style="background:transparent;border:none;font-size:15px;padding:0;cursor:pointer;opacity:.6" onclick="openRcpt('+m.id+',\''+am+'\')">🧾</button>';
+      if(ia)h+='<button style="background:transparent;border:none;color:#ccc;font-size:16px;padding:0;cursor:pointer" onclick="delMem('+m.id+')">×</button>';
+      h+='</div>';
+    });
+    h+='<div style="display:grid;grid-template-columns:'+cols+';background:#e8f0fe;border-top:2px solid #1a73e8;padding:7px 0;font-weight:bold;margin-top:2px"><div></div><div style="padding-left:4px;color:#1a73e8;font-size:11px">ድምር: '+ms.length+' ኣባላት</div><div style="text-align:center;color:#188038;font-size:12px">$'+tc+'</div><div></div>'+(ia?'<div></div>':"")+'</div>';
+    if(ia){
+      h+='<button onclick="addMem()" style="margin-top:10px;width:100%;padding:10px;border-radius:8px;border:2px dashed #1a73e8;background:transparent;color:#1a73e8;font-weight:bold;font-size:13px;cursor:pointer">+ ሓድሽ ኣባል ወስኽ</button>';
+      h+='<button onclick="printReport()" style="margin-top:7px;width:100%;padding:11px;border-radius:8px;border:none;background:#1a73e8;color:#fff;font-weight:bold;font-size:13px;cursor:pointer">🖨️ ናይ '+lbl(am)+' ሪፖርት Print/PDF</button>';
+    }
+    h+='</div>';
+    if(unp.length){h+='<div style="margin:0 12px 10px;background:#fff3f3;border:1px solid #f5c6c2;border-radius:8px;padding:12px"><div style="font-weight:bold;color:#d93025;margin-bottom:6px">⚠️ ዘይከፈሉ ('+unp.length+')</div>';unp.forEach(function(m,i){h+='<div style="color:#c62828;font-size:12px;padding:2px 0">'+(i+1)+'. '+m.name+'</div>'});h+='</div>'}
+    var mn=d.notes[am]||"";
+    h+='<div style="margin:0 12px 12px;background:#fff;border-radius:10px;padding:14px;border:1px solid #dadce0"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-weight:bold;color:#555;font-size:12px">📝 ሕጊ/ሓሳብ — '+lbl(am)+'</div>';
+    if(ia)h+='<button class="borg" onclick="openNotes(\'month\',\''+am+'\',\''+lbl(am)+'\')">✏️</button>';
+    h+='<button style="background:#25D366;border:none;color:#fff;padding:5px 10px;border-radius:6px;font-weight:bold;font-size:11px;cursor:pointer" onclick="shareMonthNotes()">📤 Share</button>';
+    h+='</div>'+(mn?'<div style="background:#fef9e7;border:1px solid #f5d56a;border-radius:8px;padding:10px;font-size:12px;color:#555;white-space:pre-wrap">'+mn+'</div>':'<div style="color:#bbb;font-size:12px;font-style:italic">ሕጊ ወይ ሓሳብ ኣይተጸሓፈን</div>')+'</div>';
+  }
+
+  if(v==="year"){
+    var ymks=moy(ny);
+    var yt=ymks.reduce(function(s,k){return s+ms.filter(function(m){return paid(m.id,k)}).length*amt},0);
+    var yp=ms.length*12*amt;
+    h+='<div class="sec"><div class="pills" style="margin-bottom:12px">';
+    YRS.forEach(function(y){h+='<button class="pill '+(ny===y?"pon":"")+'" onclick="S.ny='+y+';render()">'+y+'</button>'});
+    h+='</div><div style="display:flex;gap:6px;margin-bottom:12px">'+crd(ny+" ዝተኣከበ","$"+yt,"#188038","#e6f4ea")+crd("ዝተጸበ","$"+yp,"#1a73e8","#e8f0fe")+crd("ዘይተሰብሰበ","$"+(yp-yt),"#d93025","#fce8e6")+'</div>';
+    h+='<div class="overflow"><table><thead><tr><th class="nth">ሽም</th>';
+    MN.forEach(function(mn,i){var tmk=mk(ny,i+1);h+='<th onclick="S.am=\''+tmk+'\';S.view=\'month\';render()" style="min-width:28px;'+(tmk===CUR?"border-bottom:3px solid #ffd700":"")+'">'+mn.slice(0,2)+'</th>'});
+    h+='<th class="tth">ድምር</th></tr></thead><tbody>';
+    ms.forEach(function(m,i){
+      var pm=ymks.filter(function(k){return paid(m.id,k)});
+      h+='<tr class="'+(i%2===0?"even":"odd")+'"><td class="ntd">'+(m.name||"ኣባል "+(i+1))+'</td>';
+      ymks.forEach(function(k){var p=paid(m.id,k);h+='<td class="'+(p?"cp":"cu")+(k===CUR?" cc":"")+'"'+(ia?' onclick="tog('+m.id+',\''+k+'\')"':'')+'>'+( p?"✓":"·")+'</td>'});
+      h+='<td class="ttd" style="color:'+(pm.length===12?"#188038":pm.length>0?"#e37400":"#d93025")+'">$'+(pm.length*amt)+'</td></tr>';
+    });
+    h+='</tbody><tfoot><tr><td class="ntd">ድምር</td>';
+    ymks.forEach(function(k){var c=ms.filter(function(m){return paid(m.id,k)}).length;h+='<td style="color:'+(c===ms.length?"#188038":"#d93025")+'">'+c+'</td>'});
+    h+='<td style="color:#1a73e8;font-weight:bold">$'+yt+'</td></tr></tfoot></table></div>';
+    if(ia){
+      h+='<div style="background:#fff;border-radius:10px;padding:12px;margin-top:10px;border:1px solid #dadce0">';
+      h+='<div style="font-weight:bold;color:#555;margin-bottom:8px;font-size:13px">🖨️ ጸብጻብ ሪፖርት</div>';
+      h+='<div style="display:flex;gap:6px;margin-bottom:8px">';
+      h+='<button onclick="S.halfYear=1;render()" style="flex:1;padding:8px;border-radius:8px;border:2px solid '+(S.halfYear===1?"#1a73e8":"#dadce0")+';background:'+(S.halfYear===1?"#e8f0fe":"#fff")+';color:'+(S.halfYear===1?"#1a73e8":"#555")+';font-weight:bold;font-size:12px;cursor:pointer">ቀዳማይ 6 ወርሒ<br/><span style="font-size:10px;font-weight:normal">(ጥሪ—ሰነ)</span></button>';
+      h+='<button onclick="S.halfYear=2;render()" style="flex:1;padding:8px;border-radius:8px;border:2px solid '+(S.halfYear===2?"#1a73e8":"#dadce0")+';background:'+(S.halfYear===2?"#e8f0fe":"#fff")+';color:'+(S.halfYear===2?"#1a73e8":"#555")+';font-weight:bold;font-size:12px;cursor:pointer">ካልኣይ 6 ወርሒ<br/><span style="font-size:10px;font-weight:normal">(ሓምለ—ታህሳስ)</span></button>';
+      h+='</div>';
+      h+='<button onclick="printHalfYearReport()" style="width:100%;padding:10px;border-radius:8px;border:none;background:#e37400;color:#fff;font-weight:bold;font-size:13px;cursor:pointer;margin-bottom:6px">🖨️ ናይ 6 ወርሒ ጸብጻብ Print/PDF</button>';
+      h+='<button onclick="printYearReport()" style="width:100%;padding:10px;border-radius:8px;border:none;background:#188038;color:#fff;font-weight:bold;font-size:13px;cursor:pointer">🖨️ ናይ ዓመት ሪፖርት Print/PDF</button>';
+      h+='</div>';
+    }
+    h+='<div style="color:#888;font-size:11px;margin-top:8px">💡 '+(ia?"ሓደ ክፍሊ ጠውቕ ፡ ኩነታቱ ይቕየር":"ምርኣይ ጥራይ")+'</div></div>';
+  }
+
+  if(v==="overview"){
+    h+='<div class="sec"><div style="font-weight:bold;color:#1a73e8;margin-bottom:8px">🗓 ሓፈሻዊ ሪፖርት</div><div class="overflow"><table><thead><tr><th class="nth" style="position:sticky;left:0;z-index:6">ሽም</th>';
+    dm.forEach(function(k){var p2=pmk(k);h+='<th onclick="S.am=\''+k+'\';S.view=\'month\';render()" style="min-width:34px;font-size:9px;'+(k===CUR?"border-bottom:3px solid #ffd700":"")+'">'+MN[p2.m-1].slice(0,2)+'<br/><span style="opacity:.7">'+p2.y+'</span></th>'});
+    h+='<th class="tth">ጠቕ</th></tr></thead><tbody>';
+    ms.forEach(function(m,i){
+      var tot=dm.filter(function(k){return paid(m.id,k)}).length*amt;
+      h+='<tr class="'+(i%2===0?"even":"odd")+'" onclick="S.selId='+m.id+';S.view=\'member\';render()" style="cursor:pointer"><td class="ntd" style="color:#1a73e8">'+(m.name||"ኣባል "+(i+1))+'</td>';
+      dm.forEach(function(k){var p=paid(m.id,k);h+='<td class="'+(p?"cp":"cu")+(k===CUR?" cc":"")+'"'+(ia?' onclick="event.stopPropagation();tog('+m.id+',\''+k+'\')"':' onclick="event.stopPropagation()"')+'>'+(p?"✓":"·")+'</td>'});
+      h+='<td class="ttd" style="color:#1a73e8">$'+tot+'</td></tr>';
+    });
+    h+='</tbody><tfoot><tr><td class="ntd">ድምር</td>';
+    dm.forEach(function(k){var c=ms.filter(function(m){return paid(m.id,k)}).length;h+='<td style="color:'+(c===ms.length?"#188038":"#d93025")+'">'+c+'</td>'});
+    h+='<td style="color:#1a73e8;font-weight:bold">$'+dm.reduce(function(s,k){return s+ms.filter(function(m){return paid(m.id,k)}).length*amt},0)+'</td></tr></tfoot></table></div><div style="color:#888;font-size:11px;margin-top:8px">💡 ስም ጠውቕ ↗ ናይ ኣባል ዝርዝር</div></div>';
+  }
+
+  if(v==="member"){
+    h+='<div class="sec"><div style="font-weight:bold;color:#1a73e8;margin-bottom:10px">👤 ናይ ኣባል ሪፖርት</div><div class="chips">';
+    ms.forEach(function(m){h+='<button class="chip '+(S.selId===m.id?"chipon":"")+'" onclick="S.selId='+m.id+';render()">'+(m.name||"ኣባል "+m.id)+'</button>'});
+    h+='</div>';
+    if(sel){
+      var allMks=YRS.reduce(function(a,y){return a.concat(moy(y))},[]);
+      var pmks=allMks.filter(function(k){return paid(sel.id,k)});
+      var nu=dm.filter(function(k){return !paid(sel.id,k)});
+      var ym2=moy(ny);
+      h+='<div style="display:flex;gap:6px;margin-bottom:12px">'+crd("ዝኸፈሎ ወርሓት",pmks.length,"#188038","#e6f4ea")+crd("ዘይከፈሎ",nu.length,"#d93025","#fce8e6")+crd("ጠቕላላ","$"+(pmks.length*amt),"#e37400","#fef3e2")+'</div>';
+      var mn2=d.memberNotes["m"+sel.id]||"";
+      h+='<div style="background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid #dadce0"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-weight:bold;color:#555;font-size:12px">📝 ብዛዕባ '+(sel.name||"ኣባል")+'</div>';
+      if(ia)h+='<button class="borg" onclick="openNotes(\'member\',\'m'+sel.id+'\',\''+(sel.name||"ኣባል").replace(/\'/g,"\\'")+'\')">✏️</button>';
+      h+='</div>'+(mn2?'<div style="background:#fef9e7;border:1px solid #f5d56a;border-radius:8px;padding:10px;font-size:12px;color:#555;white-space:pre-wrap">'+mn2+'</div>':'<div style="color:#bbb;font-size:12px;font-style:italic">ሕጊ ወይ ሓሳብ ኣይተጸሓፈን</div>')+'</div>';
+      h+='<div class="pills" style="margin-bottom:10px">';
+      YRS.forEach(function(y){h+='<button class="pill '+(ny===y?"pon":"")+'" onclick="S.ny='+y+';render()">'+y+'</button>'});
+      h+='</div>';
+      ym2.forEach(function(k){
+        var p=paid(sel.id,k);var isc=k===CUR;
+        h+='<div style="display:flex;align-items:center;justify-content:space-between;background:'+(p?"#e6f4ea":"#fce8e6")+';border-radius:8px;padding:9px 12px;margin-bottom:5px;border:'+(isc?"2":"1")+'px solid '+(p?"#ceead6":"#f5c6c2")+'">';
+        h+='<div><div style="font-weight:bold;color:#333;font-size:13px">'+lbl(k)+'</div>'+(isc?'<div style="font-size:10px;color:#1a73e8">● ሕጂ</div>':"")+'</div>';
+        h+='<div style="display:flex;align-items:center;gap:6px">'+(p?'<span style="color:#188038;font-size:12px;font-weight:bold">$'+amt+'</span>':"");
+        h+='<div style="font-weight:bold;color:'+(p?"#188038":"#d93025")+';font-size:11px">'+(p?"✓ ከፊሉ":"✗ ኣይከፈለን")+'</div>';
+        h+='<button style="background:#fff8e1;border:1px solid #f5d56a;color:#e37400;padding:4px 7px;border-radius:6px;font-size:12px;cursor:pointer" onclick="openRcpt('+sel.id+',\''+k+'\')">🧾</button>';
+        h+='</div></div>';
+      });
+    } else {h+='<div class="nosel">☝️ ናይ ኣባል ስም ምረጽ</div>'}
+    h+='</div>';
+  }
+
+  if(v==="finance"){
+    var fin=d.finance||[];
+    var er=S.frate||120;
+    var totInN=fin.filter(function(r){return r.type==="in"}).reduce(function(s,r){return s+(r.nak||0)},0);
+    var totInUSD=fin.filter(function(r){return r.type==="in"}).reduce(function(s,r){return s+(r.usd||0)},0);
+    var totOut=fin.filter(function(r){return r.type==="out"}).reduce(function(s,r){return s+(r.nak||0)},0);
+    var bal=totInN-totOut;
+    h+='<div class="sec"><div style="font-weight:bold;color:#1a73e8;margin-bottom:10px;font-size:14px">💰 ናይ ማሓበር ሒሳብ</div>';
+    h+='<div style="display:flex;gap:6px;margin-bottom:10px">'+crd("ጠቕ ኣታዊ","$"+totInUSD,"#188038","#e6f4ea")+crd("ጠቕ ወጻኢ",fnum(totOut)+" ናቅፋ","#d93025","#fce8e6")+crd("ሚዛን",(bal>=0?"":"-")+fnum(Math.abs(bal))+" ናቅፋ",bal>=0?"#188038":"#d93025",bal>=0?"#e6f4ea":"#fce8e6")+'</div>';
+    h+='<div style="background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid #dadce0;display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
+    h+='<span style="font-size:12px;font-weight:bold;color:#555">ሸርፊ: $1 =</span>';
+    h+='<input id="erate" type="number" value="'+er+'" min="1" style="width:70px;padding:6px;border:2px solid #1a73e8;border-radius:6px;font-size:13px;font-weight:bold;color:#1a73e8;outline:none" oninput="S.frate=parseFloat(this.value)||120"/>';
+    h+='<span style="font-size:12px;color:#555">ናቅፋ</span></div>';
+    if(ia){
+      h+='<div style="background:#fff;border-radius:10px;padding:14px;margin-bottom:10px;border:1px solid #dadce0">';
+      h+='<div style="font-weight:bold;color:#555;margin-bottom:10px;font-size:13px">➕ ሓድሽ ምዝገባ</div>';
+      var inOn=S.ftype!=="out";
+      h+='<div style="display:flex;gap:6px;margin-bottom:10px">';
+      h+='<button onclick="S.ftype=\'in\';render()" style="flex:1;padding:9px;border-radius:8px;border:2px solid '+(inOn?"#188038":"#dadce0")+';background:'+(inOn?"#e6f4ea":"#fff")+';color:'+(inOn?"#188038":"#555")+';font-weight:bold;font-size:13px;cursor:pointer">💰 ኣታዊ</button>';
+      h+='<button onclick="S.ftype=\'out\';if(!S.fitems||!S.fitems.length)S.fitems=[{desc:\'\',nak:\'\'}];render()" style="flex:1;padding:9px;border-radius:8px;border:2px solid '+(S.ftype==="out"?"#d93025":"#dadce0")+';background:'+(S.ftype==="out"?"#fce8e6":"#fff")+';color:'+(S.ftype==="out"?"#d93025":"#555")+';font-weight:bold;font-size:13px;cursor:pointer">🛒 ወጻኢ</button>';
+      h+='</div>';
+      h+='<input type="date" value="'+(S.finDate||today())+'" oninput="S.finDate=this.value" class="inp"/>';
+      if(S.ftype==="out"){
+        var fis=S.fitems||[{desc:"",nak:""}];
+        fis.forEach(function(it,i){
+          h+='<div style="display:flex;gap:6px;margin-bottom:7px;align-items:center">';
+          h+='<input type="text" placeholder="ዝተገዝአ ንብረት..." value="'+it.desc.replace(/"/g,"&quot;")+'" oninput="updFinItem('+i+',\'desc\',this.value)" style="flex:2;padding:9px;border:1px solid #dadce0;border-radius:8px;font-size:13px;outline:none"/>';
+          h+='<input type="number" placeholder="ናቅፋ" value="'+it.nak+'" min="0" oninput="updFinItem('+i+',\'nak\',this.value)" style="flex:1;padding:9px;border:1px solid #dadce0;border-radius:8px;font-size:13px;outline:none"/>';
+          if(fis.length>1)h+='<button onclick="delFinItem('+i+')" style="background:transparent;border:none;color:#ccc;font-size:20px;cursor:pointer;line-height:1;padding:0">×</button>';
+          h+='</div>';
+        });
+        h+='<button onclick="addFinItem()" style="width:100%;padding:8px;border-radius:8px;border:2px dashed #d93025;background:transparent;color:#d93025;font-weight:bold;font-size:13px;cursor:pointer;margin-bottom:8px">+ ካልእ ንብረት ወስኽ</button>';
+      } else {
+        h+='<input type="text" placeholder="መግለጺ..." value="'+(S.finDesc||"").replace(/"/g,"&quot;")+'" oninput="S.finDesc=this.value" class="inp"/>';
+        h+='<div style="display:flex;gap:7px">';
+        h+='<input type="number" placeholder="ክንደይ $" min="0" value="'+(S.finUSD||"")+'" oninput="S.finUSD=this.value" style="flex:1;padding:9px;border:1px solid #dadce0;border-radius:8px;font-size:13px;outline:none;margin-bottom:8px"/>';
+        h+='<input type="number" placeholder="ናቅፋ (ምስ ሸርፊ)" min="0" value="'+(S.finNak||"")+'" oninput="S.finNak=this.value" style="flex:1;padding:9px;border:1px solid #dadce0;border-radius:8px;font-size:13px;outline:none;margin-bottom:8px"/>';
+        h+='</div>';
+      }
+      h+='<button class="bgreen" style="width:100%;padding:11px;font-size:14px" onclick="addFin()">✓ ምዝገባ ወስኽ</button>';
+      h+='</div>';
+    }
+    h+='<div class="pills" style="margin-bottom:8px">';
+    h+='<button class="pill '+(S.fyr===0?"pon":"")+'" onclick="S.fyr=0;render()">ኩሉ</button>';
+    YRS.forEach(function(y){h+='<button class="pill '+(S.fyr===y?"pon":"")+'" onclick="S.fyr='+y+';render()">'+y+'</button>'});
+    h+='</div>';
+    h+='<div style="display:flex;gap:6px;margin-bottom:10px"><button onclick="printFinReport()" style="flex:1;padding:11px;border-radius:8px;border:none;background:#188038;color:#fff;font-weight:bold;font-size:13px;cursor:pointer">🖨️ Print/PDF</button><button onclick="shareFinReport()" style="flex:1;padding:11px;border-radius:8px;border:none;background:#25D366;color:#fff;font-weight:bold;font-size:13px;cursor:pointer">📤 Share</button></div>';
+    var filt=fin.filter(function(r){return S.fyr===0||r.date.startsWith(String(S.fyr))});
+    if(!filt.length){h+='<div style="text-align:center;color:#aaa;padding:20px;background:#fff;border-radius:10px">ምዝገባ የለን</div>'}
+    else{
+      var withIdx=filt.map(function(r){return{r:r,oi:fin.indexOf(r)}});
+      withIdx.reverse().forEach(function(item){
+        var r=item.r,oi=item.oi,isIn=r.type==="in";
+        h+='<div class="finrow" style="border:1px solid '+(isIn?"#ceead6":"#f5c6c2")+'">';
+        h+='<div><div style="font-weight:bold;color:#333;font-size:13px">'+(isIn?"💰":"🛒")+" "+r.desc+'</div>';
+        h+='<div style="font-size:11px;color:#888;margin-top:2px">'+r.date+'</div>';
+        if(isIn)h+='<div style="font-size:11px;color:#188038;margin-top:2px">$'+(r.usd||0)+' → '+fnum(r.nak)+' ናቅፋ</div>';
+        h+='</div><div style="display:flex;align-items:center;gap:7px">';
+        h+='<div style="font-weight:bold;font-size:14px;color:'+(isIn?"#188038":"#d93025")+'">'+(isIn?"+":"-")+fnum(r.nak)+' ናቅፋ</div>';
+        if(ia)h+='<button onclick="delFin('+oi+')" style="background:#fce8e6;border:1px solid #f5c6c2;color:#d93025;font-size:15px;cursor:pointer;border-radius:6px;padding:4px 8px;font-weight:bold">×</button>';
+        h+='</div></div>';
+      });
+      var fi2=filt.filter(function(r){return r.type==="in"});
+      var fo2=filt.filter(function(r){return r.type==="out"});
+      var fiN2=fi2.reduce(function(s,r){return s+(r.nak||0)},0);
+      var fiUSD2=fi2.reduce(function(s,r){return s+(r.usd||0)},0);
+      var foN2=fo2.reduce(function(s,r){return s+(r.nak||0)},0);
+      var fb=fiN2-foN2;
+      h+='<div style="background:#fff;border-radius:10px;padding:14px;margin-top:10px;border:2px solid #1a73e8">';
+      h+='<div style="font-weight:bold;color:#1a73e8;margin-bottom:10px;font-size:13px">📊 ጠቕላላ ድምር</div>';
+      h+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:13px"><span>💰 ጠቕላላ ኣታዊ:</span><span style="font-weight:bold;color:#188038">$'+fiUSD2+' → '+fnum(fiN2)+' ናቅፋ</span></div>';
+      h+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:13px"><span>🛒 ጠቕላላ ወጻኢ:</span><span style="font-weight:bold;color:#d93025">'+fnum(foN2)+' ናቅፋ</span></div>';
+      h+='<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:15px;font-weight:bold"><span>💵 ሚዛን:</span><span style="color:'+(fb>=0?"#188038":"#d93025")+'">'+(fb>=0?"":"-")+fnum(Math.abs(fb))+' ናቅፋ</span></div>';
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+  return h;
+}
+
+function render(){
+  var root=document.getElementById("root");
+  var mroot=document.getElementById("mroot");
+  if(S.auth==="choose"||S.auth==="la"){
+    root.innerHTML=rLogin();mroot.innerHTML="";
+    if(S.auth==="la"){var i=document.getElementById("pwi");if(i)i.focus()}
+  } else {
+    root.innerHTML=rApp();
+    mroot.innerHTML=rModal();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
